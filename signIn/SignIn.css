@@ -1,0 +1,86 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: #fff;
+  color: #000;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 16px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 56px;
+}
+
+.Sign {
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+}
+
+form { display: flex; flex-direction: column; gap: 12px; }
+
+input {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 14px;
+}
+input:focus { outline: 2px solid #000; outline-offset: 1px; }
+
+.btn {
+  height: 36px;
+  border: none;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.btn-primary { background: #000; color: #fff; margin-top: 4px; }
+.btn-google {
+  width: 100%;
+  background: #eee;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.btn-google svg { position: absolute; left: 10px; }
+
+.forgot_psssword {
+  display: inline-block;
+  margin: 20px 0;
+  font-size: 13px;
+  color: #1a73e8;
+  text-decoration: none;
+}
+.forgot:hover { text-decoration: underline; }
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: #828282;
+  margin-bottom: 16px;
+}
+.divider::before,
+.divider::after { content: ""; flex: 1; height: 1px; background: #e6e6e6; }
+
+.terms {
+  margin-top: 24px;
+  font-size: 12px;
+  color: #828282;
+  line-height: 1.6;
+}
+.terms a { color: #000; text-decoration: none; }
+.terms a:hover { text-decoration: underline; }

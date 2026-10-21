@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="home_page.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div id="logo">
+                <img src="logo.png" alt="Logo">
+            </div>
+            <ul>
+                <li><a href="" class="active">Home</a></li>
+                <li><a href="">Jobs</a></li>
+                <li><a href="">About Us</a></li>
+                <li><a href="">Contact Us</a></li>
+            </ul>
+            <div class="nav_controls">
+                <button id="login_btn">Login</button>
+                <button id="Register_btn">Register</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <h1 id="main_title">Find Your Dream Job Today!</h1>
+        <h2 id="description">Connecting Talent with Opportunity: Your Gateway to Career Success</h2>
+
+        <form id="search_bar">
+            <input type="text" id="job_input" placeholder="Job Title or Company">
+            <div class="separator"></div>
+            <select id="location_select">
+                <option value="" disabled selected>Select Location</option>
+                <option>Casablanca</option>
+                <option>Rabat</option>
+                <option>Marrakech</option>
+                <option>Tanger</option>
+            </select>
+            <div class="separator"></div>
+            <select id="category_select">
+                <option value="" disabled selected>Select Category</option>
+                <option>IT</option>
+                <option>Marketing</option>
+                <option>Finance</option>
+                <option>Design</option>
+            </select>
+            <button type="submit" id="search_btn"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg> Search Job</button>
+        </form>
+
+        <section id="stats">
+            <div class="stat_item">
+                <div class="stat_icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2"/>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                    </svg>
+                </div>
+                <div class="stat_text">
+                    <span class="stat_number">25,850</span>
+                    <span class="stat_label">Jobs</span>
+                </div>
+            </div>
+            <div class="stat_item">
+                <div class="stat_icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <div class="stat_text">
+                    <span class="stat_number">10,250</span>
+                    <span class="stat_label">Candidates</span>
+                </div>
+            </div>
+            <div class="stat_item">
+                <div class="stat_icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+                        <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
+                        <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
+                        <path d="M10 6h4"/>
+                        <path d="M10 10h4"/>
+                        <path d="M10 14h4"/>
+                        <path d="M10 18h4"/>
+                    </svg>
+                </div>
+                <div class="stat_text">
+                    <span class="stat_number">18,400</span>
+                    <span class="stat_label">Companies</span>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

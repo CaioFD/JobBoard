@@ -30,5 +30,193 @@
   <section id="hero">
     <h1>Jobs</h1>
   </section>
+
+  <!-- Ícones reutilizados pelos cards (<use href="#icon-...">) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="icon-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/></symbol>
+    <symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="icon-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M16 13h2M3 10h18"/></symbol>
+    <symbol id="icon-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></symbol>
+    <symbol id="icon-bookmark" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/><path d="M12 7v6M9 10h6"/></symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+  </svg>
+
+  <main id="jobs_page">
+    <!-- ---------- FILTROS ---------- -->
+    <aside class="filters">
+      <form>
+        <h3>Search by Job Title</h3>
+        <label class="input_box">
+          <svg class="icon"><use href="#icon-search"/></svg>
+          <input type="search" placeholder="Job title or company" aria-label="Job title or company">
+        </label>
+
+        <h3>Location</h3>
+        <label class="input_box">
+          <svg class="icon"><use href="#icon-pin"/></svg>
+          <select aria-label="Choose city">
+            <option value="">Choose city</option>
+            <option>New-York</option>
+            <option>Los Angeles</option>
+            <option>Texas</option>
+            <option>Florida</option>
+            <option>Boston</option>
+          </select>
+        </label>
+
+        <h3>Category</h3>
+        <ul class="check_list" id="category_list">
+          <li><label><input type="checkbox"> Commerce</label><span class="count">10</span></li>
+          <li><label><input type="checkbox"> Telecomunications</label><span class="count">10</span></li>
+          <li><label><input type="checkbox"> Hotels &amp; Tourism</label><span class="count">10</span></li>
+          <li><label><input type="checkbox"> Education</label><span class="count">10</span></li>
+          <li><label><input type="checkbox"> Financial Services</label><span class="count">10</span></li>
+          <li class="extra" hidden><label><input type="checkbox"> Media</label><span class="count">10</span></li>
+          <li class="extra" hidden><label><input type="checkbox"> Construction</label><span class="count">10</span></li>
+        </ul>
+        <button type="button" class="btn btn_full" id="show_more">Show More</button>
+
+        <h3>Job Type</h3>
+        <ul class="check_list">
+          <li><label><input type="checkbox"> Full Time</label><span class="count">10</span></li>
+          <li><label><input type="checkbox"> Part Time</label><span class="count">10</span></li>
+          <li><label><input type="checkbox"> Freelance</label><span class="count">10</span></li>
+          <li><label><input type="checkbox"> Seasonal</label><span class="count">10</span></li>
+          <li><label><input type="checkbox"> Fixed-Price</label><span class="count">10</span></li>
+        </ul>
+
+        <h3>Experience Level</h3>
+        <ul class="check_list">
+          <li><label><input type="checkbox"> No-experience</label><span class="count">10</span></li>
+          <li><label><input type="checkbox"> Fresher</label><span class="count">10</span></li>
+          <li><label><input type="checkbox"> Intermediate</label><span class="count">10</span></li>
+          <li><label><input type="checkbox"> Expert</label><span class="count">10</span></li>
+        </ul>
+
+        <h3>Date Posted</h3>
+        <ul class="check_list">
+          <li><label><input type="checkbox"> All</label><span class="count">10</span></li>
+          <li><label><input type="checkbox"> Last Hour</label><span class="count">10</span></li>
+          <li><label><input type="checkbox"> Last 24 Hours</label><span class="count">10</span></li>
+          <li><label><input type="checkbox"> Last 7 Days</label><span class="count">10</span></li>
+          <li><label><input type="checkbox"> Last 30 Days</label><span class="count">10</span></li>
+        </ul>
+
+        <h3>Salary</h3>
+        <div class="range" id="salary_range">
+          <input type="range" min="0" max="15000" step="1" value="0" aria-label="Minimum salary">
+          <input type="range" min="0" max="15000" step="1" value="9999" aria-label="Maximum salary">
+        </div>
+        <div class="salary_footer">
+          <span>Salary: <output id="salary_value">$0 - $9999</output></span>
+          <button type="button" class="btn btn_small">Apply</button>
+        </div>
+      </form>
+    </aside>
+
+    <!-- ---------- LISTA DE VAGAS ---------- -->
+    <section class="results">
+      <div class="results_header">
+        <p>Showing 6-6 of 10 results</p>
+        <select class="sort" aria-label="Sort jobs">
+          <option>Sort by latest</option>
+          <option>Sort by oldest</option>
+          <option>Sort by salary</option>
+        </select>
+      </div>
+
+      <article class="job_card">
+        <div class="card_top">
+          <span class="time_tag">10 min ago</span>
+          <button class="bookmark" aria-label="Save job" aria-pressed="false"><svg class="icon"><use href="#icon-bookmark"/></svg></button>
+        </div>
+        <h2>Forward Security Director</h2>
+        <p class="company">Bauch, Schuppe and Schulist Co</p>
+        <div class="card_bottom">
+          <ul class="job_info">
+            <li><svg class="icon"><use href="#icon-briefcase"/></svg>Hotels &amp; Tourism</li>
+            <li><svg class="icon"><use href="#icon-clock"/></svg>Full time</li>
+            <li><svg class="icon"><use href="#icon-wallet"/></svg>$40000-$42000</li>
+            <li><svg class="icon"><use href="#icon-pin"/></svg>New-York, USA</li>
+          </ul>
+          <a href="" class="btn">Job Details</a>
+        </div>
+      </article>
+
+      <article class="job_card">
+        <div class="card_top">
+          <span class="time_tag">12 min ago</span>
+          <button class="bookmark" aria-label="Save job" aria-pressed="false"><svg class="icon"><use href="#icon-bookmark"/></svg></button>
+        </div>
+        <h2>Regional Creative Facilitator</h2>
+        <p class="company">Wisozk - Becker Co</p>
+        <div class="card_bottom">
+          <ul class="job_info">
+            <li><svg class="icon"><use href="#icon-briefcase"/></svg>Media</li>
+            <li><svg class="icon"><use href="#icon-clock"/></svg>Part time</li>
+            <li><svg class="icon"><use href="#icon-wallet"/></svg>$28000-$32000</li>
+            <li><svg class="icon"><use href="#icon-pin"/></svg>Los- Angeles, USA</li>
+          </ul>
+          <a href="" class="btn">Job Details</a>
+        </div>
+      </article>
+
+      <article class="job_card">
+        <div class="card_top">
+          <span class="time_tag">15 min ago</span>
+          <button class="bookmark" aria-label="Save job" aria-pressed="false"><svg class="icon"><use href="#icon-bookmark"/></svg></button>
+        </div>
+        <h2>Internal Integration Planner</h2>
+        <p class="company">Mraz, Quigley and Feest Inc.</p>
+        <div class="card_bottom">
+          <ul class="job_info">
+            <li><svg class="icon"><use href="#icon-briefcase"/></svg>Construction</li>
+            <li><svg class="icon"><use href="#icon-clock"/></svg>Full time</li>
+            <li><svg class="icon"><use href="#icon-wallet"/></svg>$48000-$50000</li>
+            <li><svg class="icon"><use href="#icon-pin"/></svg>Texas, USA</li>
+          </ul>
+          <a href="" class="btn">Job Details</a>
+        </div>
+      </article>
+
+      <article class="job_card">
+        <div class="card_top">
+          <span class="time_tag">24 min ago</span>
+          <button class="bookmark" aria-label="Save job" aria-pressed="false"><svg class="icon"><use href="#icon-bookmark"/></svg></button>
+        </div>
+        <h2>District Intranet Director</h2>
+        <p class="company">VonRueden - Weber Co</p>
+        <div class="card_bottom">
+          <ul class="job_info">
+            <li><svg class="icon"><use href="#icon-briefcase"/></svg>Commerce</li>
+            <li><svg class="icon"><use href="#icon-clock"/></svg>Full time</li>
+            <li><svg class="icon"><use href="#icon-wallet"/></svg>$42000-$48000</li>
+            <li><svg class="icon"><use href="#icon-pin"/></svg>Florida, USA</li>
+          </ul>
+          <a href="" class="btn">Job Details</a>
+        </div>
+      </article>
+
+      <article class="job_card">
+        <div class="card_top">
+          <span class="time_tag">26 min ago</span>
+          <button class="bookmark" aria-label="Save job" aria-pressed="false"><svg class="icon"><use href="#icon-bookmark"/></svg></button>
+        </div>
+        <h2>Corporate Tactics Facilitator</h2>
+        <p class="company">Cormier, Turner and Flatley Inc</p>
+        <div class="card_bottom">
+          <ul class="job_info">
+            <li><svg class="icon"><use href="#icon-briefcase"/></svg>Commerce</li>
+            <li><svg class="icon"><use href="#icon-clock"/></svg>Full time</li>
+            <li><svg class="icon"><use href="#icon-wallet"/></svg>$38000-$40000</li>
+            <li><svg class="icon"><use href="#icon-pin"/></svg>Boston, USA</li>
+          </ul>
+          <a href="" class="btn">Job Details</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="jobs.js"></script>
 </body>
 </html>

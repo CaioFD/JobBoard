@@ -197,9 +197,50 @@ nav a {
     }
 }
 
-@media (max-width: 640px) {
+/* ---------- RESPONSIVE: HEADER / FOOTER ---------- */
+
+@media (max-width: 1000px) {
+    nav {
+        flex-wrap: wrap;
+        padding: 0 16px 12px;
+    }
+
     nav ul {
-        display: none;
+        position: static;
+        transform: none;
+        order: 3;
+        width: 100%;
+        gap: 8px 24px;
+    }
+}
+
+@media (max-width: 640px) {
+    #logo img,
+    .footer_brand img {
+        height: 56px;
+    }
+
+    #login_btn,
+    #Register_btn {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    nav a {
+        font-size: 14px;
+    }
+
+    #hero h1 {
+        font-size: 32px;
+    }
+
+    #site_footer {
+        padding: 40px 16px;
+        margin-top: 48px;
+    }
+
+    .footer_links {
+        gap: 32px 48px;
     }
 }
 

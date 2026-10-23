@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobBoard - Create Job</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="create_job.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <div id="logo">
+        <img src="../Jobs/logo.png" alt="Logo">
+      </div>
+      <ul>
+        <li><a href="../home_page/home_page.html">Home</a></li>
+        <li><a href="../Jobs/jobs.html">Jobs</a></li>
+        <li><a href="../AboutUs/about_us.html">About Us</a></li>
+        <li><a href="../ContactUs/contact_us.html">Contact Us</a></li>
+        <li><a href="" class="active" aria-current="page">Create Job</a></li>
+      </ul>
+      <div class="nav_controls">
+        <button id="login_btn">Login</button>
+        <button id="Register_btn">Register</button>
+      </div>
+    </nav>
+  </header>
+
+  <section id="hero">
+    <h1>Create Job</h1>
+  </section>
+
+  <main id="create_job_page">
+    <form id="job_form">
+      <label class="field">
+        Job Title
+        <input type="text" name="title" placeholder="e.g. Forward Security Director" required>
+      </label>
+
+      <label class="field">
+        Company Name
+        <input type="text" name="company" placeholder="e.g. Bauch, Schuppe and Schulist Co" required>
+      </label>
+
+      <label class="field">
+        Job Type
+        <select name="job_type" required>
+          <option value="" disabled selected>Select job type</option>
+          <option>Full Time</option>
+          <option>Part Time</option>
+          <option>Freelance</option>
+          <option>Seasonal</option>
+          <option>Fixed-Price</option>
+        </select>
+      </label>
+
+      <label class="field">
+        Category
+        <select name="category" required>
+          <option value="" disabled selected>Select category</option>
+          <option>Commerce</option>
+          <option>Telecomunications</option>
+          <option>Hotels &amp; Tourism</option>
+          <option>Education</option>
+          <option>Financial Services</option>
+          <option>Media</option>
+          <option>Construction</option>
+        </select>
+      </label>
+
+      <fieldset class="field">
+        <legend>Experience</legend>
+        <div class="radios">
+          <label><input type="radio" name="experience" value="none" checked> No experience needed</label>
+          <label><input type="radio" name="experience" value="required"> Experience required</label>
+        </div>
+      </fieldset>
+
+      <label class="field" id="years_field" hidden>
+        Years of Experience
+        <select name="experience_years" id="experience_years">
+          <option value="" disabled selected>Select years</option>
+          <option value="1">1 year</option>
+          <option value="2">2 years</option>
+          <option value="3">3 years</option>
+          <option value="4">4 years</option>
+          <option value="5">5+ years</option>
+        </select>
+      </label>
+
+      <fieldset class="field full">
+        <legend>Salary (per year)</legend>
+        <div class="pair">
+          <select name="currency" aria-label="Currency" required>
+            <option value="USD" selected>$ Dollar</option>
+            <option value="EUR">€ Euro</option>
+            <option value="GBP">£ Pound</option>
+            <option value="BRL">R$ Real</option>
+            <option value="MAD">DH Dirham</option>
+          </select>
+          <input type="number" name="salary_min" min="0" placeholder="Min, e.g. 40000" aria-label="Minimum salary" required>
+          <input type="number" name="salary_max" min="0" placeholder="Max, e.g. 42000" aria-label="Maximum salary" required>
+        </div>
+      </fieldset>
+
+      <fieldset class="field full">
+        <legend>Location</legend>
+        <div class="pair">
+          <input type="text" name="city" placeholder="City" aria-label="City" required>
+          <input type="text" name="country" placeholder="Country" aria-label="Country" required>
+        </div>
+      </fieldset>
+
+      <label class="field full">
+        Job Description
+        <textarea name="description" rows="6" placeholder="Describe the role and responsibilities" required></textarea>
+      </label>
+
+      <label class="field full">
+        Professional Skills
+        <textarea name="skills" rows="5" placeholder="One skill per line" required></textarea>
+        <span class="hint">Write one skill per line.</span>
+      </label>
+
+      <button type="submit" class="btn full">Add Job</button>
+    </form>
+  </main>
+
+  <!-- ---------- FOOTER ---------- -->
+  <footer id="site_footer">
+    <div class="footer_brand">
+      <img src="../Jobs/logo.png" alt="JobBoard">
+      <p>Your next big opportunity is one search away. Don't wait for the future, apply to it.</p>
+    </div>
+    <div class="footer_links">
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="">About Us</a></li>
+          <li><a href="">Our Team</a></li>
+          <li><a href="">Jobs</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Job Categories</h4>
+        <ul>
+          <li><a href="">Telecomunications</a></li>
+          <li><a href="">Hotels &amp; Tourism</a></li>
+          <li><a href="">Construction</a></li>
+          <li><a href="">Education</a></li>
+          <li><a href="">Financial Services</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="create_job.js"></script>
+</body>
+</html>

@@ -181,7 +181,7 @@ nav a {
     font-size: 12px;
 }
 
-/* ---------- FILTROS ---------- */
+/* ---------- FILTERS ---------- */
 
 .filters {
     background-color: var(--teal_light);
@@ -258,7 +258,6 @@ nav a {
     color: var(--text_muted);
 }
 
-/* Slider duplo: dois range sobrepostos, só os "thumbs" recebem clique */
 .range {
     position: relative;
     height: 20px;
@@ -291,7 +290,7 @@ nav a {
     margin-top: 8px;
 }
 
-/* ---------- LISTA DE VAGAS ---------- */
+/* ---------- JOB LIST ---------- */
 
 .results_header {
     display: flex;
@@ -406,5 +405,75 @@ nav a {
 @media (max-width: 640px) {
     nav ul {
         display: none;
+    }
+}
+
+/* ---------- FOOTER ---------- */
+
+#site_footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+    background-color: black;
+    color: #FFFFFF;
+    padding: 64px 52px;
+    margin-top: 80px;
+}
+
+.footer_brand {
+    max-width: 320px;
+}
+
+.footer_brand img {
+    height: 76px;
+    width: auto;
+    display: block;
+}
+
+.footer_brand p {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #E0E0E0;
+    margin: 16px 0 0;
+}
+
+.footer_links {
+    display: flex;
+    gap: 40px 260px;
+    flex-wrap: wrap;
+}
+
+#site_footer h4 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0 0 16px;
+}
+
+#site_footer ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#site_footer li {
+    margin-bottom: 8px;
+}
+
+#site_footer a {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 300;
+    text-decoration: none;
+}
+
+#site_footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+    .footer_links {
+        gap: 40px 80px;
     }
 }

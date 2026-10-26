@@ -301,6 +301,11 @@ nav a {
     margin-bottom: 24px;
 }
 
+/* .btn sets display, which would otherwise override the hidden attribute */
+#create_job_btn[hidden] {
+    display: none;
+}
+
 .results_header p {
     margin: 0;
     color: var(--text_muted);

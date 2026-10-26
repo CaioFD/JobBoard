@@ -1,4 +1,20 @@
-import fastapi 
+import fastapi
+import datetime
+import hashlib
+import hmac
+import os
+import secrets
+import jwt
+import mysql.connector
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from pydantic import BaseModel
+
+JWT_SECRET = os.environ.get("JWT_SECRET")
+if not JWT_SECRET:
+    raise RuntimeError("JWT_SECRET is not set. Run once in PowerShell: setx JWT_SECRET <long random value>, then reopen the terminal")
+TOKEN_HOURS = 2
+MAX_CV_BYTES = 5 * 1024 * 1024
+
 app=fastapi.FastAPI()
 @app.get("/api/categories_HomePage")
 def get_categories():
@@ -101,6 +117,155 @@ def get_recent_jobs():
     return {
         "cards_data" : cards_data_json
     }
+
+class Credentials(BaseModel):
+    email: str
+    password: str
+
+def hash_password(password):
+    salt = secrets.token_bytes(16)
+    digest = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, 600_000)
+    return salt.hex() + "$" + digest.hex()
+
+def check_password(password, stored):
+    salt, digest = stored.split("$")
+    new_digest = hashlib.pbkdf2_hmac("sha256", password.encode(), bytes.fromhex(salt), 600_000)
+    return hmac.compare_digest(new_digest.hex(), digest)
+
+@app.post("/api/register", status_code=201)
+def register(credentials: Credentials):
+    from connexion_mysql import get_connection
+    email = credentials.email.strip().lower()
+    if "@" not in email or len(email) > 100:
+        raise fastapi.HTTPException(400, "Invalid email")
+    if len(credentials.password) < 8:
+        raise fastapi.HTTPException(400, "Password must have at least 8 characters")
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    try:
+        cursor.execute(
+            "INSERT INTO users (id_user,email,password_user,user_role) VALUES (%s,%s,%s,'user')",
+            (secrets.token_hex(15), email, hash_password(credentials.password))
+        )
+        connexion.commit()
+    except mysql.connector.IntegrityError:
+        raise fastapi.HTTPException(409, "This email is already registered")
+    finally:
+        cursor.close()
+        connexion.close()
+    return {"message": "Account created"}
+
+@app.post("/api/login")
+def login(credentials: Credentials):
+    from connexion_mysql import get_connection
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    cursor.execute("SELECT id_user,password_user,user_role FROM users WHERE email=%s", (credentials.email.strip().lower(),))
+    user = cursor.fetchone()
+    cursor.close()
+    connexion.close()
+    if user is None or not check_password(credentials.password, user[1]):
+        raise fastapi.HTTPException(401, "Invalid email or password")
+    expires = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=TOKEN_HOURS)
+    token = jwt.encode({"sub": user[0], "exp": expires}, JWT_SECRET, algorithm="HS256")
+    return {"token": token, "email": credentials.email.strip().lower(), "role": user[2]}
+
+bearer = HTTPBearer(auto_error=False)
+
+def get_current_user(auth: HTTPAuthorizationCredentials | None = fastapi.Depends(bearer)):
+    from connexion_mysql import get_connection
+    if auth is None:
+        raise fastapi.HTTPException(401, "You need to log in")
+    try:
+        payload = jwt.decode(auth.credentials, JWT_SECRET, algorithms=["HS256"])
+    except jwt.InvalidTokenError:
+        raise fastapi.HTTPException(401, "Your session is invalid or expired, please log in again")
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    # role is read from the database, not the token, so a demoted admin loses access right away
+    cursor.execute("SELECT id_user,email,user_role FROM users WHERE id_user=%s", (payload["sub"],))
+    user = cursor.fetchone()
+    cursor.close()
+    connexion.close()
+    if user is None:
+        raise fastapi.HTTPException(401, "You need to log in")
+    return {"id": user[0], "email": user[1], "role": user[2]}
+
+def require_admin(user: dict = fastapi.Depends(get_current_user)):
+    if user["role"] != "admin":
+        raise fastapi.HTTPException(403, "Only admins can do this")
+    return user
+
+class Profile(BaseModel):
+    full_name: str
+    birth_date: datetime.date
+
+def get_age(birth_date):
+    today = datetime.date.today()
+    return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+
+@app.get("/api/profile")
+def get_profile(user: dict = fastapi.Depends(get_current_user)):
+    from connexion_mysql import get_connection
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    cursor.execute("SELECT full_name,birth_date,cv IS NOT NULL FROM users WHERE id_user=%s", (user["id"],))
+    profile = cursor.fetchone()
+    cursor.close()
+    connexion.close()
+    return {
+        "email": user["email"],
+        "full_name": profile[0],
+        "birth_date": profile[1],
+        "age": get_age(profile[1]) if profile[1] else None,
+        "has_cv": bool(profile[2])
+    }
+
+@app.put("/api/profile")
+def update_profile(profile: Profile, user: dict = fastapi.Depends(get_current_user)):
+    from connexion_mysql import get_connection
+    full_name = profile.full_name.strip()
+    if not full_name or len(full_name) > 100:
+        raise fastapi.HTTPException(400, "Full name must have between 1 and 100 characters")
+    age = get_age(profile.birth_date)
+    if age < 16 or age > 120:
+        raise fastapi.HTTPException(400, "You must be at least 16 years old")
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    cursor.execute("UPDATE users SET full_name=%s,birth_date=%s WHERE id_user=%s", (full_name, profile.birth_date, user["id"]))
+    connexion.commit()
+    cursor.close()
+    connexion.close()
+    return {"message": "Profile saved", "age": age}
+
+# the frontend sends the PDF itself as the request body, so no multipart library is needed
+@app.put("/api/profile/cv")
+def upload_cv(cv: bytes = fastapi.Body(media_type="application/pdf"), user: dict = fastapi.Depends(get_current_user)):
+    from connexion_mysql import get_connection
+    if len(cv) > MAX_CV_BYTES:
+        raise fastapi.HTTPException(413, "The CV must be 5 MB or less")
+    if not cv.startswith(b"%PDF-"):
+        raise fastapi.HTTPException(400, "The CV must be a PDF file")
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    cursor.execute("UPDATE users SET cv=%s WHERE id_user=%s", (cv, user["id"]))
+    connexion.commit()
+    cursor.close()
+    connexion.close()
+    return {"message": "CV saved"}
+
+@app.get("/api/profile/cv")
+def get_cv(user: dict = fastapi.Depends(get_current_user)):
+    from connexion_mysql import get_connection
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    cursor.execute("SELECT cv FROM users WHERE id_user=%s", (user["id"],))
+    cv = cursor.fetchone()[0]
+    cursor.close()
+    connexion.close()
+    if cv is None:
+        raise fastapi.HTTPException(404, "You have not uploaded a CV yet")
+    return fastapi.Response(content=bytes(cv), media_type="application/pdf")
 
 from fastapi.middleware.cors import CORSMiddleware
 

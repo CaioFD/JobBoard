@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JobBoard - Login</title>
+  <title>JobBoard - Register</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="SignIn.css">
 </head>
@@ -13,9 +13,11 @@
   <main class="Sign">
     <p class="subtitle">Enter your email to creat your account for this app</p>
     <br>
-    <form>
-      <input type="email" name="email" placeholder="email@domain.com" aria-label="Email" required>
-      <button type="submit" class="btn btn-primary">Login</button>
+    <form id="register_form">
+      <input type="email" name="email" placeholder="email@domain.com" aria-label="Email" autocomplete="email" required>
+      <input type="password" name="password" placeholder="password (min. 8 characters)" aria-label="Password" autocomplete="new-password" minlength="8" required>
+      <p id="form_message" class="form_message" role="alert"></p>
+      <button type="submit" class="btn btn-primary">Create account</button>
     </form>
     <br>
     <div class="divider">or continue with</div>
@@ -34,6 +36,8 @@
       By clicking continue, you agree to our <a href="#">Terms of Service</a>
       and <a href="#">Privacy Policy</a>
     </p>
+    <p class="terms">Already have an account? <a href="../login/login.html">Login</a></p>
   </main>
+  <script src="SignIn.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
--- Active: 1792855879145@@localhost@3306@job_board
+
 CREATE DATABASE IF NOT EXISTS job_board;
 USE job_board;
 create table company(
@@ -139,6 +139,12 @@ SELECT name_country,name_city
  USE job_board;
  TRUNCATE job;
 
+INSERT INTO company (id_company, name_company)
+VALUES
+    ('COMP001', 'TechNova'),
+    ('COMP002', 'DataPlus'),
+    ('COMP003', 'MarketPro');
+
 INSERT INTO job (
     id_job,
     title_job,
@@ -203,13 +209,8 @@ SELECT * FROM company;
 SELECT * FROM city;
 SELECT * FROM job;
 SELECT * FROM company;
-INSERT INTO company (id_company, name_company)
-VALUES
-    ('COMP001', 'TechNova'),
-    ('COMP002', 'DataPlus'),
-    ('COMP003', 'MarketPro');
 
-SELECT title_job,id_job FROM job
+SELECT title_job,id_job FROM job;
 
 ALTER TABLE job 
 ADD COLUMN added_time DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
@@ -237,3 +238,10 @@ INNER JOIN category
 ON job.id_category=category.id_category
 ORDER BY added_time DESC
 LIMIT 5
+;
+
+-- Profile data, filled in later from the Profile page
+ALTER TABLE users
+ADD COLUMN full_name VARCHAR(100) NULL,
+ADD COLUMN birth_date DATE NULL,
+ADD COLUMN cv MEDIUMBLOB NULL;

@@ -14,9 +14,10 @@
     <h1>Enter with your account</h1>
     <p class="subtitle">Enter your email and password to login for this app</p>
 
-    <form>
-      <input type="email" name="email" placeholder="email@domain.com" aria-label="Email" required>
-      <input type="password" name="password" placeholder="password" aria-label="Password" required>
+    <form id="login_form">
+      <input type="email" name="email" placeholder="email@domain.com" aria-label="Email" autocomplete="email" required>
+      <input type="password" name="password" placeholder="password" aria-label="Password" autocomplete="current-password" required>
+      <p id="form_message" class="form_message" role="alert"></p>
       <button type="submit" class="btn btn-primary">Login</button>
     </form>
 
@@ -38,6 +39,8 @@
       By clicking continue, you agree to our <a href="#">Terms of Service</a>
       and <a href="#">Privacy Policy</a>
     </p>
+    <p class="terms">Don't have an account? <a href="../signIn/SignIn.html">Register</a></p>
   </main>
+  <script src="login.js"></script>
 </body>
 </html>

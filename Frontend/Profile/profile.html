@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobBoard - My Profile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <div id="logo">
+        <img src="../Jobs/logo.png" alt="Logo">
+      </div>
+      <ul>
+        <li><a href="../home_page/home_page.html">Home</a></li>
+        <li><a href="../Jobs/jobs.html">Jobs</a></li>
+        <li><a href="../AboutUs/about_us.html">About Us</a></li>
+        <li><a href="../ContactUs/contact_us.html">Contact Us</a></li>
+      </ul>
+      <div class="nav_controls">
+        <button id="login_btn" onclick="location.href='../login/login.html'">Login</button>
+        <button id="Register_btn" onclick="location.href='../signIn/SignIn.html'">Register</button>
+      </div>
+    </nav>
+  </header>
+
+  <section id="hero">
+    <h1>My Profile</h1>
+  </section>
+
+  <main id="profile_page">
+    <section>
+      <h2>Personal information</h2>
+      <p class="muted">This is what the company receives when you apply for a job.</p>
+
+      <form id="profile_form">
+        <label>Email
+          <input type="email" id="email" readonly>
+        </label>
+        <label>Full name
+          <input type="text" name="full_name" maxlength="100" autocomplete="name" required>
+        </label>
+        <label>Date of birth
+          <input type="date" name="birth_date" autocomplete="bday" required>
+        </label>
+        <p id="age" class="muted"></p>
+        <p id="profile_message" class="form_message" role="alert"></p>
+        <button type="submit" class="btn">Save</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>CV</h2>
+      <p class="muted">PDF only, up to 5 MB.</p>
+
+      <form id="cv_form">
+        <div class="cv_row">
+          <span id="cv_status">No CV uploaded yet</span>
+          <button type="button" id="view_cv" class="btn btn_secondary" hidden>View my CV</button>
+        </div>
+        <label>Upload a new CV
+          <input type="file" name="cv" accept="application/pdf" required>
+        </label>
+        <p id="cv_message" class="form_message" role="alert"></p>
+        <button type="submit" class="btn">Upload CV</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- ---------- FOOTER ---------- -->
+  <footer id="site_footer">
+    <div class="footer_brand">
+      <img src="../Jobs/logo.png" alt="JobBoard">
+      <p>Your next big opportunity is one search away. Don't wait for the future, apply to it.</p>
+    </div>
+    <div class="footer_links">
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="../AboutUs/about_us.html">About Us</a></li>
+          <li><a href="">Our Team</a></li>
+          <li><a href="../Jobs/jobs.html">Jobs</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Job Categories</h4>
+        <ul>
+          <li><a href="">Telecomunications</a></li>
+          <li><a href="">Hotels &amp; Tourism</a></li>
+          <li><a href="">Construction</a></li>
+          <li><a href="">Education</a></li>
+          <li><a href="">Financial Services</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+  <script src="../auth.js"></script>
+  <script src="profile.js"></script>
+</body>
+</html>

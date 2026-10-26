@@ -84,3 +84,7 @@ input:focus { outline: 2px solid #000; outline-offset: 1px; }
 }
 .terms a { color: #000; text-decoration: none; }
 .terms a:hover { text-decoration: underline; }
+
+.form_message { font-size: 13px; color: #d93025; }
+.form_message.success { color: #188038; }
+.form_message:empty { display: none; }

@@ -1,3 +1,6 @@
+// Create Job button: only shown to admins (the backend still has to check the role when saving a job)
+if (getUser()?.role === 'admin') document.getElementById('create_job_btn').hidden = false;
+
 // Favorite job
 document.querySelectorAll('.bookmark').forEach(btn => {
   btn.addEventListener('click', () => {

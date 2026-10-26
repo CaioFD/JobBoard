@@ -1,3 +1,6 @@
+// Only hides the page from non-admins; the real check is require_admin on the backend routes
+if (getUser()?.role !== 'admin') location.href = '../login/login.html';
+
 const yearsField = document.getElementById('years_field');
 const yearsSelect = document.getElementById('experience_years');
 

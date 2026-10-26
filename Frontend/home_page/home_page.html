@@ -32,22 +32,17 @@
         <h2 id="description">Connecting Talent with Opportunity: Your Gateway to Career Success</h2>
 
         <form id="search_bar">
-            <input type="text" id="job_input" placeholder="Job Title or Company">
+             <div class="separator"></div>
+            <select id="job_title_select">
+                <option value="" disabled selected>Job Title</option>
+            </select>
             <div class="separator"></div>
             <select id="location_select">
                 <option value="" disabled selected>Select Location</option>
-                <option>Casablanca</option>
-                <option>Rabat</option>
-                <option>Marrakech</option>
-                <option>Tanger</option>
             </select>
             <div class="separator"></div>
             <select id="category_select">
                 <option value="" disabled selected>Select Category</option>
-                <option>IT</option>
-                <option>Marketing</option>
-                <option>Finance</option>
-                <option>Design</option>
             </select>
             <button type="submit" id="search_btn"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg> Search Job</button>
         </form>
@@ -61,7 +56,7 @@
                     </svg>
                 </div>
                 <div class="stat_text">
-                    <span class="stat_number">25,850</span>
+                    <span class="stat_number" id="tot_jobs"></span>
                     <span class="stat_label">Jobs</span>
                 </div>
             </div>
@@ -78,7 +73,7 @@
                     </svg>
                 </div>
                 <div class="stat_text">
-                    <span class="stat_number">18,400</span>
+                    <span class="stat_number" id="tot_companies"></span>
                     <span class="stat_label">Companies</span>
                 </div>
             </div>
@@ -96,100 +91,7 @@
 
     <!-- ---------- JOB LIST ---------- -->
     <section id="recent_jobs">
-        <div class="results_header">
-            <h2>Recent Jobs Available</h2>
-            <a href="../Jobs/jobs.html">View all</a>
-        </div>
 
-        <article class="job_card">
-            <div class="card_top">
-                <span class="time_tag">10 min ago</span>
-                <button class="bookmark" aria-label="Save job" aria-pressed="false"><svg class="icon"><use href="#icon-bookmark"/></svg></button>
-            </div>
-            <h3>Forward Security Director</h3>
-            <p class="company">Bauch, Schuppe and Schulist Co</p>
-            <div class="card_bottom">
-                <ul class="job_info">
-                    <li><svg class="icon"><use href="#icon-briefcase"/></svg>Hotels &amp; Tourism</li>
-                    <li><svg class="icon"><use href="#icon-clock"/></svg>Full time</li>
-                    <li><svg class="icon"><use href="#icon-wallet"/></svg>$40000-$42000</li>
-                    <li><svg class="icon"><use href="#icon-pin"/></svg>Paris, France</li>
-                </ul>
-                <a href="" class="btn">Job Details</a>
-            </div>
-        </article>
-
-        <article class="job_card">
-            <div class="card_top">
-                <span class="time_tag">12 min ago</span>
-                <button class="bookmark" aria-label="Save job" aria-pressed="false"><svg class="icon"><use href="#icon-bookmark"/></svg></button>
-            </div>
-            <h3>Regional Creative Facilitator</h3>
-            <p class="company">Wisozk - Becker Co</p>
-            <div class="card_bottom">
-                <ul class="job_info">
-                    <li><svg class="icon"><use href="#icon-briefcase"/></svg>Media</li>
-                    <li><svg class="icon"><use href="#icon-clock"/></svg>Part time</li>
-                    <li><svg class="icon"><use href="#icon-wallet"/></svg>$28000-$32000</li>
-                    <li><svg class="icon"><use href="#icon-pin"/></svg>Marseille, France</li>
-                </ul>
-                <a href="" class="btn">Job Details</a>
-            </div>
-        </article>
-
-        <article class="job_card">
-            <div class="card_top">
-                <span class="time_tag">15 min ago</span>
-                <button class="bookmark" aria-label="Save job" aria-pressed="false"><svg class="icon"><use href="#icon-bookmark"/></svg></button>
-            </div>
-            <h3>Internal Integration Planner</h3>
-            <p class="company">Mraz, Quigley and Feest Inc.</p>
-            <div class="card_bottom">
-                <ul class="job_info">
-                    <li><svg class="icon"><use href="#icon-briefcase"/></svg>Construction</li>
-                    <li><svg class="icon"><use href="#icon-clock"/></svg>Full time</li>
-                    <li><svg class="icon"><use href="#icon-wallet"/></svg>$48000-$50000</li>
-                    <li><svg class="icon"><use href="#icon-pin"/></svg>Lyon, France</li>
-                </ul>
-                <a href="" class="btn">Job Details</a>
-            </div>
-        </article>
-
-        <article class="job_card">
-            <div class="card_top">
-                <span class="time_tag">24 min ago</span>
-                <button class="bookmark" aria-label="Save job" aria-pressed="false"><svg class="icon"><use href="#icon-bookmark"/></svg></button>
-            </div>
-            <h3>District Intranet Director</h3>
-            <p class="company">VonRueden - Weber Co</p>
-            <div class="card_bottom">
-                <ul class="job_info">
-                    <li><svg class="icon"><use href="#icon-briefcase"/></svg>Commerce</li>
-                    <li><svg class="icon"><use href="#icon-clock"/></svg>Full time</li>
-                    <li><svg class="icon"><use href="#icon-wallet"/></svg>$42000-$48000</li>
-                    <li><svg class="icon"><use href="#icon-pin"/></svg>Nice, France</li>
-                </ul>
-                <a href="" class="btn">Job Details</a>
-            </div>
-        </article>
-
-        <article class="job_card">
-            <div class="card_top">
-                <span class="time_tag">26 min ago</span>
-                <button class="bookmark" aria-label="Save job" aria-pressed="false"><svg class="icon"><use href="#icon-bookmark"/></svg></button>
-            </div>
-            <h3>Corporate Tactics Facilitator</h3>
-            <p class="company">Cormier, Turner and Flatley Inc</p>
-            <div class="card_bottom">
-                <ul class="job_info">
-                    <li><svg class="icon"><use href="#icon-briefcase"/></svg>Commerce</li>
-                    <li><svg class="icon"><use href="#icon-clock"/></svg>Full time</li>
-                    <li><svg class="icon"><use href="#icon-wallet"/></svg>$38000-$40000</li>
-                    <li><svg class="icon"><use href="#icon-pin"/></svg>Lille, France</li>
-                </ul>
-                <a href="" class="btn">Job Details</a>
-            </div>
-        </article>
     </section>
 
  <!-- ---------- FOOTER ---------- -->

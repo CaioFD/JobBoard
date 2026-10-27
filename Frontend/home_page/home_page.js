@@ -34,8 +34,8 @@ let list_category = document.getElementById("category_select");
           console.log(data_locations);
           for(const i of data_locations.locations){
               let location = document.createElement("option");
-              location.textContent = `${i.country}, ${i.city}`;
-              location.value=i.id_city;
+              location.textContent = i.country;
+              location.value=i.id_country;
               list_location.appendChild(location);
           }
       }
@@ -204,3 +204,20 @@ let list_category = document.getElementById("category_select");
 // Header fica preto ao rolar, senão o menu branco some sobre a lista de vagas
 const header = document.querySelector('header');
 window.addEventListener('scroll', () => header.classList.toggle('scrolled', scrollY > 0));
+
+
+  function search_jobs(){
+    const params = new URLSearchParams({
+      category: list_category.value,
+      location: list_location.value,
+      job_titles: list_job_title.value,
+   });
+   const URL_values=params.toString();
+   const URL = `http://127.0.0.1:5500/Frontend/Jobs/jobs.html?${URL_values}`;
+   window.location.assign(URL);
+  }
+  const btn_search = document.getElementById("search_btn");
+  btn_search.addEventListener("click",function(event){
+    event.preventDefault();
+    search_jobs();
+  });

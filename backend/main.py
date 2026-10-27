@@ -21,16 +21,14 @@ def get_locations():
     connexion = get_connection()
     cursor = connexion.cursor()
     cursor.execute("""
-    SELECT country.name_country,country.id_country,city.name_city,city.id_city
+    SELECT country.name_country,country.id_country
     FROM country
-    INNER JOIN city
-    ON city.id_country=country.id_country;
     """)
-    locations=cursor.fetchall();
+    locations=cursor.fetchall()
     cursor.close()
     locations_json=[]
     for i in locations:
-        locations_json.append({ "country" : i[0] , "city" : i[2] , "id_country" : i[1] , "id_city" : i[3] });
+        locations_json.append({ "country" : i[0] , "id_country" : i[1]});
     return {
        "locations" : locations_json
     }
@@ -111,3 +109,28 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+@app.get("/api/jobs")
+def get_all_jobs():
+    from connexion_mysql import get_connection
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    cursor.execute("""
+        SELECT job.id_job,job.title_job,company.name_company,category.name_category,job.job_type,job.min_salary,job.max_salary,city.name_city,country.name_country,job.added_time
+        FROM job 
+        INNER JOIN city
+        ON job.id_city=city.id_city
+        INNER JOIN country
+        ON country.id_country=city.id_country
+        INNER JOIN company
+        ON job.id_company=company.id_company
+        INNER JOIN category
+        ON job.id_category=category.id_category
+        ORDER BY added_time DESC
+    """)
+    cards_data = cursor.fetchall()
+    cards_data_json = []
+    for i in cards_data:
+        cards_data_json.append({"id" : i[0] ,"title" : i[1] ,"company" : i[2] ,"category" : i[3],"job_type" : i[4],"min_salary" : i[5],"max_salary" : i[6] ,"added_time" : i[9] ,"city" :i[7],"country" : i[8] })
+    return {
+        "cards_data" : cards_data_json
+    }

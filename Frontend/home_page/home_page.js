@@ -147,16 +147,16 @@ let list_category = document.getElementById("category_select");
             }
 
             
-            const btn=document.createElement("button");
-            btn.classList.add("bookmark");
-            btn.setAttribute("aria-label","Save job");
-            btn.setAttribute("aria-pressed","false");
-            btn.appendChild(make_icon("icon-bookmark"));
-            btn.addEventListener("click", () => {
-              btn.setAttribute("aria-pressed", btn.getAttribute("aria-pressed") !== "true");
-            });
             div.appendChild(span);
-            div.appendChild(btn);
+            // Edit pencil: only admins see it; saving the changes is checked again on the backend
+            if (getUser()?.role === "admin") {
+              const edit_btn = document.createElement("a");
+              edit_btn.classList.add("edit_btn");
+              edit_btn.href = `../Admin/create_job.html?id=${encodeURIComponent(i.id)}`;
+              edit_btn.setAttribute("aria-label", `Edit job ${i.title}`);
+              edit_btn.appendChild(make_icon("icon-pencil"));
+              div.appendChild(edit_btn);
+            }
             art.appendChild(div);
             const job_title = document.createElement("h3");
             job_title.textContent=i.title;

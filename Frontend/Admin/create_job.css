@@ -299,6 +299,16 @@ nav a {
     color: var(--text_muted);
 }
 
+.form_message {
+    font-size: 14px;
+    color: #D93025;
+    margin: 0;
+}
+
+.form_message:empty {
+    display: none;
+}
+
 .btn {
     background-color: var(--teal);
     color: #FFFFFF;

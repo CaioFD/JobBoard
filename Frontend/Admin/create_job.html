@@ -36,12 +36,12 @@
     <form id="job_form">
       <label class="field">
         Job Title
-        <input type="text" name="title" placeholder="e.g. Forward Security Director" required>
+        <input type="text" name="title" placeholder="e.g. Forward Security Director" maxlength="50" required>
       </label>
 
       <label class="field">
         Company Name
-        <input type="text" name="company" placeholder="e.g. Bauch, Schuppe and Schulist Co" required>
+        <input type="text" name="company" placeholder="e.g. Bauch, Schuppe and Schulist Co" maxlength="30" required>
       </label>
 
       <label class="field">
@@ -60,13 +60,20 @@
         Category
         <select name="category" required>
           <option value="" disabled selected>Select category</option>
-          <option>Commerce</option>
-          <option>Telecomunications</option>
-          <option>Hotels &amp; Tourism</option>
-          <option>Education</option>
-          <option>Financial Services</option>
-          <option>Media</option>
-          <option>Construction</option>
+        </select>
+      </label>
+
+      <label class="field">
+        Degree
+        <select name="degree" required>
+          <option value="" disabled selected>Select degree</option>
+          <option>No degree required</option>
+          <option>Bac</option>
+          <option>Bac+2</option>
+          <option>Bac+3</option>
+          <option>Bac+5</option>
+          <option>Master</option>
+          <option>PhD</option>
         </select>
       </label>
 
@@ -105,13 +112,12 @@
         </div>
       </fieldset>
 
-      <fieldset class="field full">
-        <legend>Location</legend>
-        <div class="pair">
-          <input type="text" name="city" placeholder="City" aria-label="City" required>
-          <input type="text" name="country" placeholder="Country" aria-label="Country" required>
-        </div>
-      </fieldset>
+      <label class="field full">
+        Location
+        <select name="city" required>
+          <option value="" disabled selected>Select city</option>
+        </select>
+      </label>
 
       <label class="field full">
         Job Description
@@ -124,6 +130,7 @@
         <span class="hint">Write one skill per line.</span>
       </label>
 
+      <p id="form_message" class="form_message full" role="alert"></p>
       <button type="submit" class="btn full">Add Job</button>
     </form>
   </main>

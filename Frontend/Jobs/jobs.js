@@ -1,3 +1,6 @@
+// Create Job button: only shown to admins (the backend still checks the role when saving a job)
+if (getUser()?.role === 'admin') document.getElementById('create_job_btn').hidden = false;
+
 function make_icon(id) {
   const NS = "http://www.w3.org/2000/svg";
   const svg = document.createElementNS(NS, "svg");
@@ -7,6 +10,23 @@ function make_icon(id) {
   svg.appendChild(use);
   return svg;
 }
+// Removes the job from the database; the home page reads from the database, so it disappears there too
+async function delete_job(job, card) {
+  if (!confirm(`Delete "${job.title}" (${job.company})? This cannot be undone.`)) return;
+  try {
+    const response = await apiFetch(`/api/jobs/${encodeURIComponent(job.id)}`, { method: "DELETE" });
+    // 404 means someone already deleted it, so the card should go away as well
+    if (response.ok || response.status === 404) {
+      card.remove();
+    } else {
+      const data = await response.json();
+      alert(data.detail);
+    }
+  } catch (error) {
+    alert("Could not reach the server. Is the backend running?");
+  }
+}
+
 let jobs = document.getElementById("jobs");
 async function get_all_jobs(){
       let response = await fetch("http://127.0.0.1:8000/api/jobs");
@@ -53,16 +73,16 @@ async function get_all_jobs(){
             }
 
             
-            const btn=document.createElement("button");
-            btn.classList.add("bookmark");
-            btn.setAttribute("aria-label","Save job");
-            btn.setAttribute("aria-pressed","false");
-            btn.appendChild(make_icon("icon-bookmark"));
-            btn.addEventListener("click", () => {
-              btn.setAttribute("aria-pressed", btn.getAttribute("aria-pressed") !== "true");
-            });
             div.appendChild(span);
-            div.appendChild(btn);
+            // Edit pencil: only admins see it; saving the changes is checked again on the backend
+            if (getUser()?.role === "admin") {
+              const edit_btn = document.createElement("a");
+              edit_btn.classList.add("edit_btn");
+              edit_btn.href = `../Admin/create_job.html?id=${encodeURIComponent(i.id)}`;
+              edit_btn.setAttribute("aria-label", `Edit job ${i.title}`);
+              edit_btn.appendChild(make_icon("icon-pencil"));
+              div.appendChild(edit_btn);
+            }
             art.appendChild(div);
             const job_title = document.createElement("h3");
             job_title.textContent=i.title;
@@ -92,11 +112,22 @@ async function get_all_jobs(){
             li_location.append(`${i.country}, ${i.city}`);
             job_infos.appendChild(li_location);
             card_btm.appendChild(job_infos);
+            const card_actions = document.createElement("div");
+            card_actions.classList.add("card_actions");
+            if (getUser()?.role === "admin") {
+              const delete_btn = document.createElement("button");
+              delete_btn.classList.add("btn", "btn_delete");
+              delete_btn.textContent = "Delete";
+              delete_btn.setAttribute("aria-label", `Delete job ${i.title}`);
+              delete_btn.addEventListener("click", () => delete_job(i, art));
+              card_actions.appendChild(delete_btn);
+            }
             const a_btn = document.createElement("a");
             a_btn.setAttribute("href","");
             a_btn.classList.add("btn");
             a_btn.textContent = "Job Details";
-            card_btm.appendChild(a_btn);
+            card_actions.appendChild(a_btn);
+            card_btm.appendChild(card_actions);
             art.appendChild(card_btm);
             section.appendChild(art);
         }

@@ -245,3 +245,7 @@ ALTER TABLE users
 ADD COLUMN full_name VARCHAR(100) NULL,
 ADD COLUMN birth_date DATE NULL,
 ADD COLUMN cv MEDIUMBLOB NULL;
+
+-- Currency chosen by the admin on the Create Job page
+ALTER TABLE job
+ADD COLUMN currency VARCHAR(3) NOT NULL DEFAULT 'USD';

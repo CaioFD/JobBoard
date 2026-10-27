@@ -299,3 +299,153 @@ def get_all_jobs():
     return {
         "cards_data" : cards_data_json
     }
+
+@app.get("/api/cities")
+def get_cities():
+    from connexion_mysql import get_connection
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    cursor.execute("""
+        SELECT city.id_city,city.name_city,country.name_country
+        FROM city
+        INNER JOIN country
+        ON city.id_country=country.id_country
+        ORDER BY country.name_country,city.name_city
+    """)
+    cities = cursor.fetchall()
+    cursor.close()
+    connexion.close()
+    return {
+        "cities" : [{"id" : i[0], "city" : i[1], "country" : i[2]} for i in cities]
+    }
+
+JOB_TYPES = ["Full Time", "Part Time", "Freelance", "Seasonal", "Fixed-Price"]
+CURRENCIES = ["USD", "EUR", "GBP", "BRL", "MAD"]
+
+class NewJob(BaseModel):
+    title: str
+    company: str
+    job_type: str
+    id_category: str
+    degree: str
+    experience: int
+    currency: str
+    min_salary: int
+    max_salary: int
+    id_city: str
+    description: str
+    skills: str
+
+def check_job(job):
+    if not job.title.strip() or len(job.title.strip()) > 50:
+        raise fastapi.HTTPException(400, "Job title must have between 1 and 50 characters")
+    if not job.company.strip() or len(job.company.strip()) > 30:
+        raise fastapi.HTTPException(400, "Company name must have between 1 and 30 characters")
+    if job.job_type not in JOB_TYPES or job.currency not in CURRENCIES:
+        raise fastapi.HTTPException(400, "Invalid job type or currency")
+    if not job.degree.strip() or len(job.degree) > 50:
+        raise fastapi.HTTPException(400, "Choose a degree")
+    if not 0 <= job.experience <= 5:
+        raise fastapi.HTTPException(400, "Invalid years of experience")
+    if not 0 < job.min_salary < job.max_salary:
+        raise fastapi.HTTPException(400, "Minimum salary must be above 0 and lower than the maximum salary")
+    if not job.description.strip() or not job.skills.strip():
+        raise fastapi.HTTPException(400, "Description and skills are required")
+
+# reuse the company if it already exists (MySQL compares names ignoring case), otherwise create it
+def get_company_id(cursor, company):
+    cursor.execute("SELECT id_company FROM company WHERE name_company=%s", (company,))
+    row = cursor.fetchone()
+    if row:
+        return row[0]
+    id_company = "COMP" + secrets.token_hex(3).upper()
+    cursor.execute("INSERT INTO company (id_company,name_company) VALUES (%s,%s)", (id_company, company))
+    return id_company
+
+@app.post("/api/jobs", status_code=201)
+def create_job(job: NewJob, admin: dict = fastapi.Depends(require_admin)):
+    from connexion_mysql import get_connection
+    check_job(job)
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    try:
+        id_company = get_company_id(cursor, job.company.strip())
+        id_job = "JOB" + secrets.token_hex(3).upper()
+        cursor.execute("""
+            INSERT INTO job (id_job,title_job,id_category,job_type,degree,job_description,pro_skills,id_company,id_city,experience,min_salary,max_salary,currency)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (id_job, job.title.strip(), job.id_category, job.job_type, job.degree.strip(), job.description.strip(), job.skills.strip(),
+              id_company, job.id_city, str(job.experience), job.min_salary, job.max_salary, job.currency))
+        connexion.commit()
+    except mysql.connector.IntegrityError:
+        connexion.rollback()
+        raise fastapi.HTTPException(400, "Unknown category or city")
+    finally:
+        cursor.close()
+        connexion.close()
+    return {"message": "Job created", "id": id_job}
+
+# public on purpose: the future Job Details page will show this to everyone
+@app.get("/api/jobs/{id_job}")
+def get_job(id_job: str):
+    from connexion_mysql import get_connection
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    cursor.execute("""
+        SELECT job.id_job,job.title_job,company.name_company,job.job_type,job.id_category,job.degree,job.experience,
+               job.currency,job.min_salary,job.max_salary,job.id_city,job.job_description,job.pro_skills
+        FROM job
+        INNER JOIN company
+        ON job.id_company=company.id_company
+        WHERE job.id_job=%s
+    """, (id_job,))
+    i = cursor.fetchone()
+    cursor.close()
+    connexion.close()
+    if i is None:
+        raise fastapi.HTTPException(404, "This job does not exist anymore")
+    return {"id" : i[0], "title" : i[1], "company" : i[2], "job_type" : i[3], "id_category" : i[4], "degree" : i[5],
+            "experience" : int(i[6]), "currency" : i[7], "min_salary" : i[8], "max_salary" : i[9], "id_city" : i[10],
+            "description" : i[11], "skills" : i[12]}
+
+@app.put("/api/jobs/{id_job}")
+def update_job(id_job: str, job: NewJob, admin: dict = fastapi.Depends(require_admin)):
+    from connexion_mysql import get_connection
+    check_job(job)
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    try:
+        # added_time is not touched, so editing a job does not move it to the top of Recent Jobs
+        cursor.execute("SELECT id_job FROM job WHERE id_job=%s", (id_job,))
+        if cursor.fetchone() is None:
+            raise fastapi.HTTPException(404, "This job does not exist anymore")
+        id_company = get_company_id(cursor, job.company.strip())
+        cursor.execute("""
+            UPDATE job SET title_job=%s,id_category=%s,job_type=%s,degree=%s,job_description=%s,pro_skills=%s,
+                           id_company=%s,id_city=%s,experience=%s,min_salary=%s,max_salary=%s,currency=%s
+            WHERE id_job=%s
+        """, (job.title.strip(), job.id_category, job.job_type, job.degree.strip(), job.description.strip(), job.skills.strip(),
+              id_company, job.id_city, str(job.experience), job.min_salary, job.max_salary, job.currency, id_job))
+        connexion.commit()
+    except mysql.connector.IntegrityError:
+        connexion.rollback()
+        raise fastapi.HTTPException(400, "Unknown category or city")
+    finally:
+        cursor.close()
+        connexion.close()
+    return {"message": "Job updated", "id": id_job}
+
+
+@app.delete("/api/jobs/{id_job}")
+def delete_job(id_job: str, admin: dict = fastapi.Depends(require_admin)):
+    from connexion_mysql import get_connection
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    cursor.execute("DELETE FROM job WHERE id_job=%s", (id_job,))
+    connexion.commit()
+    deleted = cursor.rowcount
+    cursor.close()
+    connexion.close()
+    if deleted == 0:
+        raise fastapi.HTTPException(404, "This job does not exist anymore")
+    return {"message": "Job deleted"}

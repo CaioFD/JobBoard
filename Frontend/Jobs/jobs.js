@@ -123,7 +123,7 @@ async function get_all_jobs(){
               card_actions.appendChild(delete_btn);
             }
             const a_btn = document.createElement("a");
-            a_btn.setAttribute("href","");
+            a_btn.setAttribute("href", `../JobDetails/job_details.html?id=${encodeURIComponent(i.id)}`);
             a_btn.classList.add("btn");
             a_btn.textContent = "Job Details";
             card_actions.appendChild(a_btn);

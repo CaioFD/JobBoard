@@ -393,10 +393,17 @@ def get_job(id_job: str):
     cursor = connexion.cursor()
     cursor.execute("""
         SELECT job.id_job,job.title_job,company.name_company,job.job_type,job.id_category,job.degree,job.experience,
-               job.currency,job.min_salary,job.max_salary,job.id_city,job.job_description,job.pro_skills
+               job.currency,job.min_salary,job.max_salary,job.id_city,job.job_description,job.pro_skills,
+               category.name_category,city.name_city,country.name_country,job.added_time
         FROM job
         INNER JOIN company
         ON job.id_company=company.id_company
+        INNER JOIN category
+        ON job.id_category=category.id_category
+        INNER JOIN city
+        ON job.id_city=city.id_city
+        INNER JOIN country
+        ON city.id_country=country.id_country
         WHERE job.id_job=%s
     """, (id_job,))
     i = cursor.fetchone()
@@ -406,7 +413,7 @@ def get_job(id_job: str):
         raise fastapi.HTTPException(404, "This job does not exist anymore")
     return {"id" : i[0], "title" : i[1], "company" : i[2], "job_type" : i[3], "id_category" : i[4], "degree" : i[5],
             "experience" : int(i[6]), "currency" : i[7], "min_salary" : i[8], "max_salary" : i[9], "id_city" : i[10],
-            "description" : i[11], "skills" : i[12]}
+            "description" : i[11], "skills" : i[12], "category" : i[13], "city" : i[14], "country" : i[15], "added_time" : i[16]}
 
 @app.put("/api/jobs/{id_job}")
 def update_job(id_job: str, job: NewJob, admin: dict = fastapi.Depends(require_admin)):

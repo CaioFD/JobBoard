@@ -1,0 +1,405 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #FFFFFF;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* ---------- HEADER ---------- */
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+/* ---------- NAV ---------- */
+
+nav {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    padding: 0 40px;
+    position: relative;
+}
+
+/* ---------- LOGO ---------- */
+
+#logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #FFFFFF;
+    margin: 0;
+    padding: 0;
+}
+
+#logo img {
+    height: 76px;
+    width: auto;
+    display: block;
+}
+
+/* ---------- NAV LINKS ---------- */
+
+nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    justify-content: center;
+    align-items: center;
+    gap: 8px 56px;
+    padding: 0;
+    margin: 0;
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+nav a {
+    text-decoration: none;
+    font-size: 16px;
+    color: #FFFFFF;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+}
+
+.active {
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+/* ---------- LOGIN / REGISTER ---------- */
+
+.nav_controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    padding: 0;
+}
+
+#login_btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    cursor: pointer;
+    padding: 8px 12px;
+}
+
+#Register_btn {
+    background-color: #309689;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    color: white;
+    text-align: center;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    cursor: pointer;
+}
+
+/* ---------- HERO ---------- */
+
+#hero {
+    background-color: black;
+    color: #FFFFFF;
+    padding: 24px 0 32px;
+}
+
+#hero h1 {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* ---------- FOOTER ---------- */
+
+#site_footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+    background-color: black;
+    color: #FFFFFF;
+    padding: 64px 52px;
+    margin-top: 80px;
+}
+
+.footer_brand {
+    max-width: 320px;
+}
+
+.footer_brand img {
+    height: 76px;
+    width: auto;
+    display: block;
+}
+
+.footer_brand p {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #E0E0E0;
+    margin: 16px 0 0;
+}
+
+.footer_links {
+    display: flex;
+    gap: 40px 260px;
+    flex-wrap: wrap;
+}
+
+#site_footer h4 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0 0 16px;
+}
+
+#site_footer ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#site_footer li {
+    margin-bottom: 8px;
+}
+
+#site_footer a {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 300;
+    text-decoration: none;
+}
+
+#site_footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+    .footer_links {
+        gap: 40px 80px;
+    }
+}
+
+/* ---------- RESPONSIVE: HEADER / FOOTER ---------- */
+
+@media (max-width: 1000px) {
+    nav {
+        flex-wrap: wrap;
+        padding: 0 16px 12px;
+    }
+
+    nav ul {
+        position: static;
+        transform: none;
+        order: 3;
+        width: 100%;
+        gap: 8px 24px;
+    }
+}
+
+@media (max-width: 640px) {
+    #logo img,
+    .footer_brand img {
+        height: 56px;
+    }
+
+    #login_btn,
+    #Register_btn {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    nav a {
+        font-size: 14px;
+    }
+
+    #hero h1 {
+        font-size: 32px;
+    }
+
+    #site_footer {
+        padding: 40px 16px;
+        margin-top: 48px;
+    }
+
+    .footer_links {
+        gap: 32px 48px;
+    }
+}
+
+/* Job text is typed by admins: very long words (or "AAAA...") must wrap instead of widening the page */
+#hero,
+#job_details_page {
+    overflow-wrap: anywhere;
+}
+
+#hero {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+#hero p {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 300;
+    color: #E0E0E0;
+    margin: 8px 0 0;
+}
+
+/* ---------- JOB DETAILS PAGE ---------- */
+
+#job_details_page {
+    --teal: #309689;
+    --teal_light: #EBF5F4;
+    --text_muted: #6C757D;
+
+    display: grid;
+    /* minmax(0, ...) keeps the column at the page width even when the text inside is wider */
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    max-width: 1200px;
+    margin: 64px auto 0;
+    padding: 0 40px;
+}
+
+#job_details_page h2 {
+    font-size: 22px;
+    font-weight: 500;
+    margin: 0 0 20px;
+}
+
+.job_content section + section {
+    margin-top: 48px;
+}
+
+#job_description p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #212529;
+    margin: 0 0 12px;
+}
+
+.check_list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.check_list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    fill: none;
+    stroke: var(--teal);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Page order, top to bottom: Apply, Overview, description and skills */
+.job_overview {
+    background-color: var(--teal_light);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+#job_details_page .job_overview h2 {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.job_overview dl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px 24px;
+    margin: 0;
+}
+
+.job_overview div {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 12px;
+}
+
+.apply_box {
+    text-align: center;
+}
+
+.apply_btn {
+    min-width: 240px;
+    background-color: #2563EB;
+    color: #FFFFFF;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 24px;
+    cursor: pointer;
+}
+
+.apply_btn:hover {
+    background-color: #1D4ED8;
+}
+
+.apply_btn:focus-visible {
+    outline: 2px solid #1D4ED8;
+    outline-offset: 2px;
+}
+
+.job_overview .icon {
+    grid-row: span 2;
+}
+
+.job_overview dt {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.job_overview dd {
+    font-size: 14px;
+    color: var(--text_muted);
+    margin: 2px 0 0;
+}
+
+.not_found {
+    grid-column: 1 / -1;
+    text-align: center;
+}
+
+.not_found a {
+    color: var(--teal);
+}
+
+@media (max-width: 640px) {
+    #job_details_page {
+        padding: 0 16px;
+        margin-top: 40px;
+    }
+}

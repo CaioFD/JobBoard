@@ -5,6 +5,6 @@ def get_connection():
         host="localhost",
         port=3306,
         user="root",
-        password="Pokemon@123@123",
+        password="Rayoreyo123456}",
         database="job_board"
     )

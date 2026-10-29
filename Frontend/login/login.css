@@ -48,36 +48,13 @@ input:focus { outline: 2px solid #000; outline-offset: 1px; }
   cursor: pointer;
 }
 .btn-primary { background: #000; color: #fff; margin-top: 4px; }
-.btn-google {
-  width: 100%;
-  background: #eee;
-  color: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-.btn-google svg { position: absolute; left: 10px; }
 
-.forgot_psssword {
-  display: inline-block;
-  margin: 20px 0;
-  font-size: 13px;
-  color: #1a73e8;
-  text-decoration: none;
-}
-.forgot:hover { text-decoration: underline; }
 
-.divider {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 12px;
-  color: #828282;
-  margin-bottom: 16px;
-}
-.divider::before,
-.divider::after { content: ""; flex: 1; height: 1px; background: #e6e6e6; }
+
+
+.form_message { font-size: 13px; color: #d93025; }
+.form_message.success { color: #188038; }
+.form_message:empty { display: none; }
 
 .terms {
   margin-top: 24px;
@@ -87,7 +64,3 @@ input:focus { outline: 2px solid #000; outline-offset: 1px; }
 }
 .terms a { color: #000; text-decoration: none; }
 .terms a:hover { text-decoration: underline; }
-
-.form_message { font-size: 13px; color: #d93025; }
-.form_message.success { color: #188038; }
-.form_message:empty { display: none; }

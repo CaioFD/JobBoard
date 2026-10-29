@@ -25,6 +25,23 @@ async function apiFetch(path, options = {}) {
   return response;
 }
 
+function addNavLink(text, href) {
+  const link = document.createElement("a");
+  link.href = href;
+  link.textContent = text;
+  if (location.pathname.endsWith(href.slice(href.lastIndexOf("/")))) {
+    link.classList.add("active");
+    link.setAttribute("aria-current", "page");
+  }
+  const li = document.createElement("li");
+  li.appendChild(link);
+  document.querySelector("header nav ul").appendChild(li);
+}
+
+// Logged-in users see their applications; admins also see everyone's
+if (getToken()) addNavLink("My Applications", "../MyApplications/my_applications.html");
+if (getUser()?.role === "admin") addNavLink("Applications", "../Admin/applications.html");
+
 if (getToken()) {
   const loginBtn = document.getElementById("login_btn");
   const registerBtn = document.getElementById("Register_btn");

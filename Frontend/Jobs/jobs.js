@@ -18,6 +18,7 @@ async function delete_job(job, card) {
     // 404 means someone already deleted it, so the card should go away as well
     if (response.ok || response.status === 404) {
       card.remove();
+      paginate(current_page);
     } else {
       const data = await response.json();
       alert(data.detail);
@@ -28,114 +29,134 @@ async function delete_job(job, card) {
 }
 
 let jobs = document.getElementById("jobs");
+// One card builder for every list (all jobs, filters, search from the home page), so they all get the same link and admin buttons
+function make_card(i){
+        const art=document.createElement("article");
+        art.classList.add("job_card");
+        const div=document.createElement("div");
+        div.classList.add("card_top");
+        const span=document.createElement("span");
+        span.classList.add("time_tag");
+        const added_time=new Date(i.added_time);
+        const now=new Date();
+        let diff=now - added_time;
+        if(diff<1000 && diff>=0){
+          span.textContent = "Just now";
+        }
+        else if(diff>=1000 && diff<60000){
+          diff = Math.floor(diff/1000);
+          span.textContent=`${diff} s ago`;
+        }
+        else if(diff>=60000 && diff<3600000){
+          diff=Math.floor(diff/60000);
+          span.textContent=`${diff} min(s) ago`;
+        }
+        else if(diff>=3600000 && diff<86400000){
+          diff=Math.floor(diff/3600000);
+          span.textContent=`${diff} hour(s) ago`;
+        }
+        else if(diff>=86400000 && diff<2592000000){
+          diff=Math.floor(diff/86400000);
+          span.textContent = `${diff} day(s) ago`;
+        }
+        else if(diff>=2592000000 && diff<31536000000){
+          diff=Math.floor(diff/2592000000);
+          span.textContent = `${diff} Month(s) ago`;
+        }
+        else{
+          diff=Math.floor(diff/31536000000);
+          span.textContent = `${diff} year(s) ago`;
+        }
+
+        
+        div.appendChild(span);
+        // Edit pencil: only admins see it; saving the changes is checked again on the backend
+        if (getUser()?.role === "admin") {
+          const edit_btn = document.createElement("a");
+          edit_btn.classList.add("edit_btn");
+          edit_btn.href = `../Admin/create_job.html?id=${encodeURIComponent(i.id)}`;
+          edit_btn.setAttribute("aria-label", `Edit job ${i.title}`);
+          edit_btn.appendChild(make_icon("icon-pencil"));
+          div.appendChild(edit_btn);
+        }
+        art.appendChild(div);
+        const job_title = document.createElement("h3");
+        job_title.textContent=i.title;
+        art.appendChild(job_title);
+        const name_company = document.createElement("p");
+        name_company.classList.add("company");
+        name_company.textContent = i.company;
+        art.appendChild(name_company);
+        const card_btm = document.createElement("div");
+        card_btm.classList.add("card_bottom");
+        const job_infos = document.createElement("ul");
+        job_infos.classList.add("job_info");
+        const job_infos_items = document.createElement("li");
+        job_infos_items.appendChild(make_icon("icon-briefcase"));
+        job_infos_items.append(i.category);
+        job_infos.appendChild(job_infos_items);
+        const list_items = document.createElement("li");
+        list_items.appendChild(make_icon("icon-clock"));
+        list_items.append(i.job_type);
+        job_infos.appendChild(list_items);
+        const list_wallet = document.createElement("li");
+        list_wallet.appendChild(make_icon("icon-wallet"));
+        list_wallet.append(`${i.min_salary}-${i.max_salary}`);
+        job_infos.appendChild(list_wallet);
+        const li_location = document.createElement("li");
+        li_location.appendChild(make_icon("icon-pin"));
+        li_location.append(`${i.country}, ${i.city}`);
+        job_infos.appendChild(li_location);
+        card_btm.appendChild(job_infos);
+        const card_actions = document.createElement("div");
+        card_actions.classList.add("card_actions");
+        if (getUser()?.role === "admin") {
+          const delete_btn = document.createElement("button");
+          delete_btn.classList.add("btn", "btn_delete");
+          delete_btn.textContent = "Delete";
+          delete_btn.setAttribute("aria-label", `Delete job ${i.title}`);
+          delete_btn.addEventListener("click", () => delete_job(i, art));
+          card_actions.appendChild(delete_btn);
+        }
+        const a_btn = document.createElement("a");
+        a_btn.setAttribute("href", `../JobDetails/job_details.html?id=${encodeURIComponent(i.id)}`);
+        a_btn.classList.add("btn");
+        a_btn.textContent = "Job Details";
+        card_actions.appendChild(a_btn);
+        card_btm.appendChild(card_actions);
+        art.appendChild(card_btm);
+        return art;
+}
+
 async function get_all_jobs(){
       let response = await fetch("http://127.0.0.1:8000/api/jobs");
       if(response.ok){
         const recent_jobs = await response.json();
-        console.log(recent_jobs);
-        const section = document.getElementById("jobs");
-        for(const i of recent_jobs.cards_data){
-            const art=document.createElement("article");
-            art.classList.add("job_card");
-            const div=document.createElement("div");
-            div.classList.add("card_top");
-            const span=document.createElement("span");
-            span.classList.add("time_tag");
-            const added_time=new Date(i.added_time);
-            const now=new Date();
-            let diff=now - added_time;
-            if(diff<1000 && diff>=0){
-              span.textContent = "Just now";
-            }
-            else if(diff>=1000 && diff<60000){
-              diff = Math.floor(diff/1000);
-              span.textContent=`${diff} s ago`;
-            }
-            else if(diff>=60000 && diff<3600000){
-              diff=Math.floor(diff/60000);
-              span.textContent=`${diff} min(s) ago`;
-            }
-            else if(diff>=3600000 && diff<86400000){
-              diff=Math.floor(diff/3600000);
-              span.textContent=`${diff} hour(s) ago`;
-            }
-            else if(diff>=86400000 && diff<2592000000){
-              diff=Math.floor(diff/86400000);
-              span.textContent = `${diff} day(s) ago`;
-            }
-            else if(diff>=2592000000 && diff<31536000000){
-              diff=Math.floor(diff/2592000000);
-              span.textContent = `${diff} Month(s) ago`;
-            }
-            else{
-              diff=Math.floor(diff/31536000000);
-              span.textContent = `${diff} year(s) ago`;
-            }
-
-            
-            div.appendChild(span);
-            // Edit pencil: only admins see it; saving the changes is checked again on the backend
-            if (getUser()?.role === "admin") {
-              const edit_btn = document.createElement("a");
-              edit_btn.classList.add("edit_btn");
-              edit_btn.href = `../Admin/create_job.html?id=${encodeURIComponent(i.id)}`;
-              edit_btn.setAttribute("aria-label", `Edit job ${i.title}`);
-              edit_btn.appendChild(make_icon("icon-pencil"));
-              div.appendChild(edit_btn);
-            }
-            art.appendChild(div);
-            const job_title = document.createElement("h3");
-            job_title.textContent=i.title;
-            art.appendChild(job_title);
-            const name_company = document.createElement("p");
-            name_company.classList.add("company");
-            name_company.textContent = i.company;
-            art.appendChild(name_company);
-            const card_btm = document.createElement("div");
-            card_btm.classList.add("card_bottom");
-            const job_infos = document.createElement("ul");
-            job_infos.classList.add("job_info");
-            const job_infos_items = document.createElement("li");
-            job_infos_items.appendChild(make_icon("icon-briefcase"));
-            job_infos_items.append(i.category);
-            job_infos.appendChild(job_infos_items);
-            const list_items = document.createElement("li");
-            list_items.appendChild(make_icon("icon-clock"));
-            list_items.append(i.job_type);
-            job_infos.appendChild(list_items);
-            const list_wallet = document.createElement("li");
-            list_wallet.appendChild(make_icon("icon-wallet"));
-            list_wallet.append(`${i.min_salary}-${i.max_salary}`);
-            job_infos.appendChild(list_wallet);
-            const li_location = document.createElement("li");
-            li_location.appendChild(make_icon("icon-pin"));
-            li_location.append(`${i.country}, ${i.city}`);
-            job_infos.appendChild(li_location);
-            card_btm.appendChild(job_infos);
-            const card_actions = document.createElement("div");
-            card_actions.classList.add("card_actions");
-            if (getUser()?.role === "admin") {
-              const delete_btn = document.createElement("button");
-              delete_btn.classList.add("btn", "btn_delete");
-              delete_btn.textContent = "Delete";
-              delete_btn.setAttribute("aria-label", `Delete job ${i.title}`);
-              delete_btn.addEventListener("click", () => delete_job(i, art));
-              card_actions.appendChild(delete_btn);
-            }
-            const a_btn = document.createElement("a");
-            a_btn.setAttribute("href", `../JobDetails/job_details.html?id=${encodeURIComponent(i.id)}`);
-            a_btn.classList.add("btn");
-            a_btn.textContent = "Job Details";
-            card_actions.appendChild(a_btn);
-            card_btm.appendChild(card_actions);
-            art.appendChild(card_btm);
-            section.appendChild(art);
-        }
+        display_cards("jobs", recent_jobs.cards_data);
       }
       else{
         alert("Error");
       }
   }
+
+const PAGE_SIZE = 5;
+let current_page = 1;
+// shortcut: every job is loaded and the cards outside the page are hidden; move to LIMIT/OFFSET in the API if there are thousands of jobs
+function paginate(page) {
+  const cards = document.querySelectorAll("#jobs .job_card");
+  const total_pages = Math.max(1, Math.ceil(cards.length / PAGE_SIZE));
+  current_page = Math.min(Math.max(page, 1), total_pages);
+  const start = (current_page - 1) * PAGE_SIZE;
+  cards.forEach((card, index) => card.hidden = index < start || index >= start + PAGE_SIZE);
+  document.getElementById("results_count").textContent = cards.length
+    ? `Showing ${start + 1}-${Math.min(start + PAGE_SIZE, cards.length)} of ${cards.length} results`
+    : "No jobs found";
+  document.getElementById("page_info").textContent = `Page ${current_page} of ${total_pages}`;
+  document.getElementById("prev_page").disabled = current_page === 1;
+  document.getElementById("next_page").disabled = current_page === total_pages;
+}
+document.getElementById("prev_page").addEventListener("click", () => paginate(current_page - 1));
+document.getElementById("next_page").addEventListener("click", () => paginate(current_page + 1));
   
   let list_location = document.getElementById("location_select");
     async function charge_locations() {
@@ -295,92 +316,10 @@ async function search_jobs() {
 function display_cards(id_container,jobs){
       const section = document.getElementById(id_container);
       section.innerHTML = "";
-        for(const i of jobs){
-            const art=document.createElement("article");
-            art.classList.add("job_card");
-            const div=document.createElement("div");
-            div.classList.add("card_top");
-            const span=document.createElement("span");
-            span.classList.add("time_tag");
-            const added_time=new Date(i.added_time);
-            const now=new Date();
-            let diff=now - added_time;
-            if(diff<1000 && diff>=0){
-              span.textContent = "Just now";
-            }
-            else if(diff>=1000 && diff<60000){
-              diff = Math.floor(diff/1000);
-              span.textContent=`${diff} s ago`;
-            }
-            else if(diff>=60000 && diff<3600000){
-              diff=Math.floor(diff/60000);
-              span.textContent=`${diff} min(s) ago`;
-            }
-            else if(diff>=3600000 && diff<86400000){
-              diff=Math.floor(diff/3600000);
-              span.textContent=`${diff} hour(s) ago`;
-            }
-            else if(diff>=86400000 && diff<2592000000){
-              diff=Math.floor(diff/86400000);
-              span.textContent = `${diff} day(s) ago`;
-            }
-            else if(diff>=2592000000 && diff<31536000000){
-              diff=Math.floor(diff/2592000000);
-              span.textContent = `${diff} Month(s) ago`;
-            }
-            else{
-              diff=Math.floor(diff/31536000000);
-              span.textContent = `${diff} year(s) ago`;
-            }
-
-            
-            const btn=document.createElement("button");
-            btn.classList.add("bookmark");
-            btn.setAttribute("aria-label","Save job");
-            btn.setAttribute("aria-pressed","false");
-            btn.appendChild(make_icon("icon-bookmark"));
-            btn.addEventListener("click", () => {
-              btn.setAttribute("aria-pressed", btn.getAttribute("aria-pressed") !== "true");
-            });
-            div.appendChild(span);
-            div.appendChild(btn);
-            art.appendChild(div);
-            const job_title = document.createElement("h3");
-            job_title.textContent=i.title;
-            art.appendChild(job_title);
-            const name_company = document.createElement("p");
-            name_company.classList.add("company");
-            name_company.textContent = i.company;
-            art.appendChild(name_company);
-            const card_btm = document.createElement("div");
-            card_btm.classList.add("card_bottom");
-            const job_infos = document.createElement("ul");
-            job_infos.classList.add("job_info");
-            const job_infos_items = document.createElement("li");
-            job_infos_items.appendChild(make_icon("icon-briefcase"));
-            job_infos_items.append(i.category);
-            job_infos.appendChild(job_infos_items);
-            const list_items = document.createElement("li");
-            list_items.appendChild(make_icon("icon-clock"));
-            list_items.append(i.job_type);
-            job_infos.appendChild(list_items);
-            const list_wallet = document.createElement("li");
-            list_wallet.appendChild(make_icon("icon-wallet"));
-            list_wallet.append(`${i.min_salary}-${i.max_salary}`);
-            job_infos.appendChild(list_wallet);
-            const li_location = document.createElement("li");
-            li_location.appendChild(make_icon("icon-pin"));
-            li_location.append(`${i.country}, ${i.city}`);
-            job_infos.appendChild(li_location);
-            card_btm.appendChild(job_infos);
-            const a_btn = document.createElement("a");
-            a_btn.setAttribute("href","");
-            a_btn.classList.add("btn");
-            a_btn.textContent = "Job Details";
-            card_btm.appendChild(a_btn);
-            art.appendChild(card_btm);
-            section.appendChild(art);
-}
+      for(const i of jobs){
+        section.appendChild(make_card(i));
+      }
+      paginate(1);
 }
 async function read_filters_homePage(){
   const params = window.location.search;

@@ -265,6 +265,118 @@ def get_cv(user: dict = fastapi.Depends(get_current_user)):
         raise fastapi.HTTPException(404, "You have not uploaded a CV yet")
     return fastapi.Response(content=bytes(cv), media_type="application/pdf")
 
+@app.post("/api/jobs/{id_job}/apply", status_code=201)
+def apply_job(id_job: str, user: dict = fastapi.Depends(get_current_user)):
+    from connexion_mysql import get_connection
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    try:
+        cursor.execute("SELECT full_name,birth_date,cv IS NOT NULL FROM users WHERE id_user=%s", (user["id"],))
+        full_name, birth_date, has_cv = cursor.fetchone()
+        if not full_name or not birth_date or not has_cv:
+            raise fastapi.HTTPException(400, "Complete your profile (full name, birth date and CV) before applying")
+        cursor.execute("INSERT INTO application (id_user,id_job) VALUES (%s,%s)", (user["id"], id_job))
+        connexion.commit()
+    except mysql.connector.IntegrityError as error:
+        # 1062 = this user already has a row for this job; otherwise the job id does not exist
+        if error.errno == 1062:
+            raise fastapi.HTTPException(409, "You have already applied for this job")
+        raise fastapi.HTTPException(404, "This job does not exist anymore")
+    finally:
+        cursor.close()
+        connexion.close()
+    return {"message": "Application sent"}
+
+@app.get("/api/jobs/{id_job}/apply")
+def get_application(id_job: str, user: dict = fastapi.Depends(get_current_user)):
+    from connexion_mysql import get_connection
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    cursor.execute("SELECT 1 FROM application WHERE id_user=%s AND id_job=%s", (user["id"], id_job))
+    applied = cursor.fetchone() is not None
+    cursor.close()
+    connexion.close()
+    return {"applied": applied}
+
+# the admin page reads this table, so a cancelled application disappears from it too
+@app.delete("/api/jobs/{id_job}/apply")
+def cancel_application(id_job: str, user: dict = fastapi.Depends(get_current_user)):
+    from connexion_mysql import get_connection
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    cursor.execute("DELETE FROM application WHERE id_user=%s AND id_job=%s", (user["id"], id_job))
+    connexion.commit()
+    deleted = cursor.rowcount
+    cursor.close()
+    connexion.close()
+    if deleted == 0:
+        raise fastapi.HTTPException(404, "You have not applied for this job")
+    return {"message": "Application cancelled"}
+
+@app.get("/api/my_applications")
+def get_my_applications(user: dict = fastapi.Depends(get_current_user)):
+    from connexion_mysql import get_connection
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    cursor.execute("""
+        SELECT job.id_job,job.title_job,company.name_company,city.name_city,country.name_country,application.applied_at
+        FROM application
+        INNER JOIN job
+        ON application.id_job=job.id_job
+        INNER JOIN company
+        ON job.id_company=company.id_company
+        INNER JOIN city
+        ON job.id_city=city.id_city
+        INNER JOIN country
+        ON city.id_country=country.id_country
+        WHERE application.id_user=%s
+        ORDER BY application.applied_at DESC
+    """, (user["id"],))
+    applications = cursor.fetchall()
+    cursor.close()
+    connexion.close()
+    return {
+        "applications" : [{"id_job" : i[0], "title" : i[1], "company" : i[2], "city" : i[3], "country" : i[4], "applied_at" : i[5]} for i in applications]
+    }
+
+# name, age and CV are read from the profile now, so the admin always sees the latest version
+@app.get("/api/applications")
+def get_applications(admin: dict = fastapi.Depends(require_admin)):
+    from connexion_mysql import get_connection
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    cursor.execute("""
+        SELECT users.id_user,users.full_name,users.email,users.birth_date,job.id_job,job.title_job,company.name_company,application.applied_at
+        FROM application
+        INNER JOIN users
+        ON application.id_user=users.id_user
+        INNER JOIN job
+        ON application.id_job=job.id_job
+        INNER JOIN company
+        ON job.id_company=company.id_company
+        ORDER BY application.applied_at DESC
+    """)
+    applications = cursor.fetchall()
+    cursor.close()
+    connexion.close()
+    return {
+        "applications" : [{"id_user" : i[0], "full_name" : i[1], "email" : i[2], "age" : get_age(i[3]) if i[3] else None,
+                           "id_job" : i[4], "title" : i[5], "company" : i[6], "applied_at" : i[7]} for i in applications]
+    }
+
+@app.get("/api/users/{id_user}/cv")
+def get_user_cv(id_user: str, admin: dict = fastapi.Depends(require_admin)):
+    from connexion_mysql import get_connection
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    cursor.execute("SELECT cv FROM users WHERE id_user=%s", (id_user,))
+    row = cursor.fetchone()
+    cursor.close()
+    connexion.close()
+    if row is None or row[0] is None:
+        raise fastapi.HTTPException(404, "This user has no CV")
+    return fastapi.Response(content=bytes(row[0]), media_type="application/pdf")
+
 from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(

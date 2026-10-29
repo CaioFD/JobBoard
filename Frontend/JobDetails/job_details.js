@@ -75,4 +75,88 @@ async function loadJob() {
     }
 }
 
+const applyBtn = document.getElementById('apply_btn');
+const cancelBtn = document.getElementById('cancel_btn');
+const applyMessage = document.getElementById('apply_message');
+
+function showApplyMessage(text, success = false) {
+    applyMessage.textContent = text;
+    applyMessage.classList.toggle('success', success);
+}
+
+function showApplied(applied) {
+    applyBtn.textContent = applied ? 'Applied' : 'Apply';
+    applyBtn.disabled = applied;
+    cancelBtn.hidden = !applied;
+}
+
+// plain fetch instead of apiFetch: an expired token should not send a visitor to the login page just for opening a job
+async function loadApplied() {
+    if (!getToken() || !jobId) return;
+    try {
+        const response = await fetch(`${API_URL}/api/jobs/${encodeURIComponent(jobId)}/apply`, {
+            headers: { Authorization: 'Bearer ' + getToken() }
+        });
+        if (response.ok) showApplied((await response.json()).applied);
+    } catch (error) {
+        // the Apply button still works, it just does not know the status yet
+    }
+}
+
+cancelBtn.addEventListener('click', async () => {
+    if (!confirm('Cancel your application for this job?')) return;
+    cancelBtn.disabled = true;
+    try {
+        const response = await apiFetch(`/api/jobs/${encodeURIComponent(jobId)}/apply`, { method: 'DELETE' });
+        // 404 means it was already cancelled, so the page should show Apply again as well
+        if (response.ok || response.status === 404) {
+            showApplied(false);
+            showApplyMessage('Application cancelled.', true);
+        } else {
+            showApplyMessage((await response.json()).detail);
+        }
+    } catch (error) {
+        showApplyMessage('Could not reach the server. Is the backend running?');
+    }
+    cancelBtn.disabled = false;
+});
+
+// Only logged-in users can apply; the backend also checks that the profile has name, birth date and CV
+applyBtn.addEventListener('click', async () => {
+    if (!getToken()) {
+        location.href = '../login/login.html';
+        return;
+    }
+    applyBtn.disabled = true;
+    try {
+        const response = await apiFetch(`/api/jobs/${encodeURIComponent(jobId)}/apply`, { method: 'POST' });
+        const data = await response.json();
+        if (response.status === 400) {
+            showApplyMessage(data.detail + ' ');
+            const link = document.createElement('a');
+            link.href = '../Profile/profile.html';
+            link.textContent = 'Go to my profile';
+            applyMessage.appendChild(link);
+            applyBtn.disabled = false;
+            return;
+        }
+        if (response.status === 409) {
+            showApplyMessage(data.detail);
+            showApplied(true);
+            return;
+        }
+        if (!response.ok) {
+            showApplyMessage(data.detail);
+            applyBtn.disabled = false;
+            return;
+        }
+        showApplyMessage('Application sent!', true);
+        showApplied(true);
+    } catch (error) {
+        showApplyMessage('Could not reach the server. Is the backend running?');
+        applyBtn.disabled = false;
+    }
+});
+
 loadJob();
+loadApplied();

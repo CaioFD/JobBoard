@@ -105,13 +105,13 @@
     <!-- ----------Jobs List ---------- -->
     <section class="results">
       <div class="results_header">
-        <p>Showing 6-6 of 10 results</p>
+        <p id="results_count"></p>
+        <nav id="pagination" aria-label="Jobs pages">
+          <button type="button" id="prev_page" class="btn">Previous</button>
+          <span id="page_info" aria-live="polite"></span>
+          <button type="button" id="next_page" class="btn">Next</button>
+        </nav>
         <a href="../Admin/create_job.html" id="create_job_btn" class="btn" hidden>+ Create a new job</a>
-        <select class="sort" aria-label="Sort jobs">
-          <option>Sort by latest</option>
-          <option>Sort by oldest</option>
-          <option>Sort by salary</option>
-        </select>
       </div>
     <section id="jobs">
 
@@ -129,19 +129,18 @@
       <div>
         <h4>Company</h4>
         <ul>
-          <li><a href="">About Us</a></li>
-          <li><a href="">Our Team</a></li>
-          <li><a href="">Jobs</a></li>
+          <li><a href="../AboutUs/about_us.html">About Us</a></li>
+          <li><a href="../Jobs/jobs.html">Jobs</a></li>
         </ul>
       </div>
       <div>
         <h4>Job Categories</h4>
         <ul>
-          <li><a href="">Telecomunications</a></li>
-          <li><a href="">Hotels &amp; Tourism</a></li>
-          <li><a href="">Construction</a></li>
-          <li><a href="">Education</a></li>
-          <li><a href="">Financial Services</a></li>
+          <li><a href="../Jobs/jobs.html?category=CAT011">Telecommunications</a></li>
+          <li><a href="../Jobs/jobs.html?category=CAT005">Hotels &amp; Tourism</a></li>
+          <li><a href="../Jobs/jobs.html?category=CAT007">Construction</a></li>
+          <li><a href="../Jobs/jobs.html?category=CAT009">Education</a></li>
+          <li><a href="../Jobs/jobs.html?category=CAT010">Financial Services</a></li>
         </ul>
       </div>
     </div>

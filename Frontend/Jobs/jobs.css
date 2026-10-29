@@ -261,13 +261,17 @@ nav a {
 
 /* ---------- JOB LIST ---------- */
 
+/* equal side columns keep the pagination in the exact middle */
 .results_header {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     gap: 12px;
-    justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
+}
+
+#create_job_btn {
+    justify-self: end;
 }
 
 /* .btn sets display, which would otherwise override the hidden attribute */
@@ -280,13 +284,18 @@ nav a {
     color: var(--text_muted);
 }
 
-.sort {
-    font-family: inherit;
-    font-size: 14px;
-    padding: 6px 10px;
-    border: 1px solid #CED4DA;
-    border-radius: 6px;
-    background-color: #FFFFFF;
+/* width and padding undo the header's global nav rule */
+#pagination {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: auto;
+    padding: 0;
+}
+
+#pagination .btn:disabled {
+    opacity: 0.4;
+    cursor: default;
 }
 
 .job_card {
@@ -406,6 +415,11 @@ nav a {
 }
 
 @media (max-width: 640px) {
+    .results_header {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+
     #logo img,
     .footer_brand img {
         height: 56px;

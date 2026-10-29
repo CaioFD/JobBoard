@@ -843,3 +843,17 @@ INNER JOIN city ON job.id_city = city.id_city
 INNER JOIN country ON city.id_country = country.id_country
 INNER JOIN category ON job.id_category = category.id_category
 WHERE job.id_job = 'JOB012';
+-- Applications: one row each time a user applies; the admin sees them on the Applications page
+-- deleting a job or a user removes its applications too
+CREATE TABLE IF NOT EXISTS application(
+    id_user varchar(30) NOT NULL,
+    id_job varchar(10) NOT NULL,
+    applied_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    PRIMARY KEY(id_user, id_job),
+    constraint fk_application_user
+        FOREIGN KEY(id_user)
+        REFERENCES users(id_user) ON DELETE CASCADE,
+    constraint fk_application_job
+        FOREIGN KEY(id_job)
+        REFERENCES job(id_job) ON DELETE CASCADE
+);

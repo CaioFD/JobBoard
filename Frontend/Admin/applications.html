@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobBoard - Applications</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- header, hero and footer styles are shared with Create Job -->
+  <link rel="stylesheet" href="create_job.css">
+  <link rel="stylesheet" href="applications.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <div id="logo">
+        <img src="../Jobs/logo.png" alt="Logo">
+      </div>
+      <ul>
+        <li><a href="../home_page/home_page.html">Home</a></li>
+        <li><a href="../Jobs/jobs.html">Jobs</a></li>
+        <li><a href="../AboutUs/about_us.html">About Us</a></li>
+        <li><a href="../ContactUs/contact_us.html">Contact Us</a></li>
+      </ul>
+      <div class="nav_controls">
+        <button id="login_btn" onclick="location.href='../login/login.html'">Login</button>
+        <button id="Register_btn" onclick="location.href='../signIn/SignIn.html'">Register</button>
+      </div>
+    </nav>
+  </header>
+
+  <section id="hero">
+    <h1>Applications</h1>
+  </section>
+
+  <main id="applications_page">
+    <p id="applications_message" class="applications_message" role="status"></p>
+    <div class="table_wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Age</th>
+            <th scope="col">Job</th>
+            <th scope="col">Applied</th>
+            <th scope="col">CV</th>
+          </tr>
+        </thead>
+        <tbody id="applications_list"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- ---------- FOOTER ---------- -->
+  <footer id="site_footer">
+    <div class="footer_brand">
+      <img src="../Jobs/logo.png" alt="JobBoard">
+      <p>Your next big opportunity is one search away. Don't wait for the future, apply to it.</p>
+    </div>
+    <div class="footer_links">
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="../AboutUs/about_us.html">About Us</a></li>
+          <li><a href="../Jobs/jobs.html">Jobs</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Job Categories</h4>
+        <ul>
+          <li><a href="../Jobs/jobs.html?category=CAT011">Telecommunications</a></li>
+          <li><a href="../Jobs/jobs.html?category=CAT005">Hotels &amp; Tourism</a></li>
+          <li><a href="../Jobs/jobs.html?category=CAT007">Construction</a></li>
+          <li><a href="../Jobs/jobs.html?category=CAT009">Education</a></li>
+          <li><a href="../Jobs/jobs.html?category=CAT010">Financial Services</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../auth.js"></script>
+  <script src="applications.js"></script>
+</body>
+</html>

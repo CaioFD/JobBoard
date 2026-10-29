@@ -373,6 +373,52 @@ nav a {
     outline-offset: 2px;
 }
 
+.apply_btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.cancel_btn {
+    display: block;
+    margin: 12px auto 0;
+    background: none;
+    color: #D93025;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #D93025;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.cancel_btn[hidden] {
+    display: none;
+}
+
+.cancel_btn:hover {
+    background-color: #FDECEA;
+}
+
+.cancel_btn:focus-visible {
+    outline: 2px solid #D93025;
+    outline-offset: 2px;
+}
+
+.apply_message {
+    font-size: 14px;
+    color: #D93025;
+    margin: 12px 0 0;
+}
+
+.apply_message.success {
+    color: #309689;
+}
+
+.apply_message:empty {
+    display: none;
+}
+
 .job_overview .icon {
     grid-row: span 2;
 }

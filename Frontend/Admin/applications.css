@@ -1,0 +1,70 @@
+/* ---------- APPLICATIONS ---------- */
+
+#applications_page {
+    /* .btn from create_job.css reads --teal, which is only set on the Create Job page */
+    --teal: #309689;
+
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 40px;
+}
+
+.applications_message {
+    color: #6C757D;
+    text-align: center;
+}
+
+.applications_message:empty {
+    display: none;
+}
+
+/* the table scrolls sideways on small screens instead of the whole page */
+.table_wrap {
+    overflow-x: auto;
+}
+
+#applications_page table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    font-size: 14px;
+}
+
+#applications_page th,
+#applications_page td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #E9ECEF;
+    white-space: nowrap;
+}
+
+#applications_page th {
+    font-weight: 500;
+    color: #6C757D;
+}
+
+#applications_page tbody tr:last-child td {
+    border-bottom: none;
+}
+
+#applications_page td a {
+    color: #309689;
+}
+
+#applications_page .btn {
+    font-size: 14px;
+    padding: 8px 16px;
+}
+
+/* used by My Applications, which shares this stylesheet */
+#applications_page .btn_cancel {
+    background-color: #D93025;
+}
+
+@media (max-width: 700px) {
+    #applications_page {
+        padding: 0 16px;
+    }
+}

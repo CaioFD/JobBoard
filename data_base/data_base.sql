@@ -857,3 +857,5 @@ CREATE TABLE IF NOT EXISTS application(
         FOREIGN KEY(id_job)
         REFERENCES job(id_job) ON DELETE CASCADE
 );
+
+SELECT * FROM users;

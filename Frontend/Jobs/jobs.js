@@ -175,40 +175,50 @@ document.getElementById("next_page").addEventListener("click", () => paginate(cu
           alert("Error");
         }
     }
-  
-  let list_category = document.getElementById("category_select");
-  async function charge_categories() {
-      let response = await fetch("http://127.0.0.1:8000/api/categories_HomePage");
-      if(response.ok){
-          const data= await response.json();
-          console.log(data);
-          let count=0;
-          for(const i of data.categories){
-              count++;
-              let list_item=document.createElement("li");
-              let label = document.createElement("label");
-              let input = document.createElement("input");
-              input.setAttribute("type","checkbox");
-              input.value = i.id;
-              let span = document.createElement("span");
-              span.setAttribute("class","count");
-              label.appendChild(input);
-              label.append(i.name);
-              span.append(10);
-              list_item.appendChild(label);
-              list_item.appendChild(span);
-              list_category.appendChild(list_item);
-            if(count>5){
-              list_item.setAttribute("class","extra");
-              list_item.setAttribute("hidden","");
-            }
-        }
-      } 
+let filter_counts = { category: [], job_type: [], degree: [], date_posted: [] };
 
-      else{
-        alert("Error");
-      }
+async function load_counts() {
+  const response = await fetch("http://127.0.0.1:8000/api/filter_counts");
+  if (response.ok) {
+    filter_counts = await response.json();
+  } else {
+    alert("Error");
+  }
+}
+
+function render_checklist(ul_id, items) {
+  const ul = document.getElementById(ul_id);
+  ul.innerHTML = "";
+  for (const item of items) {
+    const li = document.createElement("li");
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.value = item.value;
+    label.appendChild(input);
+    label.append(" " + item.label);
+    const span = document.createElement("span");
+    span.className = "count";
+    span.textContent = item.count;
+    li.appendChild(label);
+    li.appendChild(span);
+    ul.appendChild(li);
+  }
+}
+function render_filters() {
+  render_checklist("category_select", filter_counts.category);
+  render_checklist("job_type", filter_counts.job_type);
+  render_checklist("degree", filter_counts.degree);
+  render_checklist("date_posted", filter_counts.date_posted);
+
+  // Category : seulement les 5 premières visibles, "Show More" affiche le reste
+  document.querySelectorAll("#category_select li").forEach((li, index) => {
+    if (index >= 5) {
+      li.classList.add("extra");
+      li.hidden = true;
     }
+  });
+}
   function btn_show_more(){
     let btn = document.getElementById("show_more");
     btn.addEventListener("click",function(){
@@ -354,22 +364,112 @@ async function read_filters_homePage(){
     alert("Error");
   }
 }
+function make_searchable(select, placeholder) {
+  if (select._combo) { select._combo.refresh(); return; }
+  const box = select.closest(".input_box");
+  const wrap = document.createElement("div");
+  wrap.className = "combo";
+  const input = document.createElement("input");
+  input.type = "text";
+  input.className = "combo_input";
+  input.placeholder = placeholder;
+  input.autocomplete = "off";
+  const arrow = document.createElement("span");
+  arrow.className = "combo_arrow";
+  const list = document.createElement("ul");
+  list.className = "combo_list";
+  list.hidden = true;
+  wrap.append(input, arrow, list);
+  select.style.display = "none";
+  box.appendChild(wrap);
 
+  const MAX = 60;
+  let active = -1;
+  let shown = [];
+
+  const selected_label = () => {
+    const o = select.options[select.selectedIndex];
+    return o && o.value !== "" ? o.textContent : "";
+  };
+
+  function render(filter) {
+    const q = filter.trim().toLowerCase();
+    list.innerHTML = "";
+    shown = [...select.options].filter(o => o.textContent.toLowerCase().includes(q));
+    const visible = shown.slice(0, MAX);
+    visible.forEach((o, idx) => {
+      const li = document.createElement("li");
+      li.textContent = o.value === "" ? "All" : o.textContent;
+      if (o.value === select.value) li.classList.add("selected");
+      li.addEventListener("mousedown", e => { e.preventDefault(); choose(o); });
+      li.addEventListener("mousemove", () => set_active(idx));
+      list.appendChild(li);
+    });
+    if (!visible.length) {
+      const li = document.createElement("li");
+      li.className = "empty";
+      li.textContent = "No result";
+      list.appendChild(li);
+    } else if (shown.length > MAX) {
+      const li = document.createElement("li");
+      li.className = "empty";
+      li.textContent = `${shown.length - MAX} more… keep typing`;
+      list.appendChild(li);
+    }
+    active = -1;
+  }
+
+  function set_active(i) {
+    const items = list.querySelectorAll("li:not(.empty)");
+    items.forEach(li => li.classList.remove("active"));
+    active = i;
+    if (items[i]) {
+      items[i].classList.add("active");
+      items[i].scrollIntoView({ block: "nearest" });
+    }
+  }
+
+  function open() { render(""); list.hidden = false; box.classList.add("open"); }
+  function close() { list.hidden = true; box.classList.remove("open"); input.value = selected_label(); }
+
+  function choose(option) {
+    select.value = option.value;
+    input.value = selected_label();
+    list.hidden = true;
+    box.classList.remove("open");
+    input.blur();
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
+  input.addEventListener("focus", () => { open(); input.select(); });
+  input.addEventListener("blur", close);
+  input.addEventListener("input", () => { list.hidden = false; render(input.value); });
+  // le "change" natif du champ texte ne doit pas déclencher la recherche
+  input.addEventListener("change", e => e.stopPropagation());
+  input.addEventListener("keydown", e => {
+    const count = Math.min(shown.length, MAX);
+    if (e.key === "ArrowDown") { e.preventDefault(); if (list.hidden) open(); set_active(Math.min(active + 1, count - 1)); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); set_active(Math.max(active - 1, 0)); }
+    else if (e.key === "Enter") { e.preventDefault(); if (shown[active]) choose(shown[active]); else if (count === 1) choose(shown[0]); }
+    else if (e.key === "Escape") { input.blur(); }
+  });
+  arrow.addEventListener("mousedown", e => { e.preventDefault(); list.hidden ? input.focus() : input.blur(); });
+
+  select._combo = { refresh: () => { input.value = selected_label(); } };
+  input.value = selected_label();
+}
 async function initialiser_page(){
+  await load_counts();
+  render_filters();
   await charge_locations();
-  await charge_categories();
   await charge_job_titles();
+  make_searchable(list_location, "Search a country");
+  make_searchable(list_job_title, "Search a job title");
   const params = new URLSearchParams(window.location.search);
-const hasFilters =
-    params.has("category") ||
-    params.has("location") ||
-    params.has("job_titles");
-if(hasFilters){
-  await read_filters_homePage();
-}
-else{
-  await get_all_jobs();
-
-}
+  const hasFilters = params.has("category") || params.has("location") || params.has("job_titles");
+  if (hasFilters) { await read_filters_homePage(); }
+  else { await get_all_jobs(); }
+  list_location._combo.refresh();   // affiche la valeur venue de la home
+  list_job_title._combo.refresh();
 }
 initialiser_page();

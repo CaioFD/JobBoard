@@ -163,7 +163,8 @@ main {
     margin: 48px auto 0;
     background-color: #FFFFFF;
     border-radius: 12px;
-    overflow: hidden;
+    overflow: visible;
+    
 }
 
 #search_bar input,
@@ -200,6 +201,7 @@ main {
     display: flex;
     align-items: center;
     gap: 8px;
+    border-radius: 0 12px 12px 0;
 }
 
 /* ---------- STATS ---------- */
@@ -559,3 +561,90 @@ main {
         font-size: 24px;
     }
 }
+/* ---------- SEARCHABLE SELECTS ---------- */
+.combo { position: relative; flex: 1; min-width: 0; height: 52px; display: flex; align-items: center; padding: 0 20px; }
+
+.combo_input {
+    flex: 1; width: 100%; min-width: 0; border: none; outline: none; background: transparent;
+    font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 300; color: #333;
+    cursor: text; text-overflow: ellipsis;
+}
+.combo_input::placeholder { color: #6C757D; }
+
+.combo_arrow {
+    width: 8px; height: 8px; margin-left: 8px; flex-shrink: 0; cursor: pointer;
+    border-right: 2px solid #6C757D; border-bottom: 2px solid #6C757D;
+    transform: rotate(45deg) translateY(-2px); transition: transform .2s;
+}
+.combo.open .combo_arrow { transform: rotate(-135deg) translateY(-2px); }
+
+/* trait vert sous le champ actif */
+.combo::after {
+    content: ""; position: absolute; left: 20px; right: 20px; bottom: 8px; height: 2px;
+    background: #309689; border-radius: 2px;
+    transform: scaleX(0); transform-origin: left; transition: transform .2s;
+}
+.combo.open::after { transform: scaleX(1); }
+
+/* s'ouvre toujours vers le bas, par-dessus la page, sans rien décaler */
+.combo_list {
+    position: absolute; top: calc(100% + 8px); left: 0; z-index: 60;
+    min-width: 100%; width: max-content; max-width: 320px;
+    max-height: 260px; overflow-y: auto; margin: 0; padding: 6px; list-style: none;
+    background: #fff; border-radius: 12px; box-shadow: 0 12px 32px rgba(0,0,0,.18);
+    animation: combo_in .15s ease-out;
+}
+.combo_list[hidden] { display: none; }
+@keyframes combo_in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+.combo_list li { padding: 8px 10px; border-radius: 8px; font-size: 13px; color: #212529; cursor: pointer; }
+.combo_list li.active { background: #EBF5F4; }
+.combo_list li.selected { color: #309689; font-weight: 500; }
+.combo_list li.empty { color: #6C757D; cursor: default; }
+.combo_list::-webkit-scrollbar { width: 6px; }
+.combo_list::-webkit-scrollbar-thumb { background: #CED4DA; border-radius: 3px; }
+
+@media (max-width: 640px) {
+    .combo { flex: none; height: 48px; }
+    .combo_list { width: 100%; max-width: none; }
+    #search_btn { border-radius: 0 0 12px 12px; }
+}/* barre de défilement arrondie, détachée des bords de la liste */
+.combo_list {
+    scrollbar-width: thin;                       /* Firefox */
+    scrollbar-color: #B8D8D4 transparent;
+}
+.combo_list::-webkit-scrollbar { width: 12px; }
+.combo_list::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 10px 0;                              /* la barre ne touche pas les coins arrondis */
+}
+.combo_list::-webkit-scrollbar-thumb {
+    background: #B8D8D4;
+    border-radius: 999px;
+    border: 3px solid #fff;                      /* effet "flottant" dans la liste */
+    transition: background .2s;
+}
+.combo_list::-webkit-scrollbar-thumb:hover { background: #309689; }
+/* pas de soulignement ni de gras sur la valeur survolée */
+.combo_list li.active {
+    text-decoration: none;
+    font-weight: 300;
+}
+.combo_list li.selected.active {
+    font-weight: 500;
+}
+.combo_list {
+    scrollbar-width: thin;                 /* Firefox */
+    scrollbar-color: #CED4DA transparent;
+}
+.combo_list::-webkit-scrollbar { width: 12px; }
+.combo_list::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 10px 0;
+}
+.combo_list::-webkit-scrollbar-thumb {
+    background: #CED4DA;
+    border-radius: 999px;
+    border: 3px solid #fff;
+}
+.combo_list::-webkit-scrollbar-thumb:hover { background: #CED4DA; }

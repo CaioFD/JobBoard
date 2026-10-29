@@ -265,15 +265,6 @@ def get_cv(user: dict = fastapi.Depends(get_current_user)):
         raise fastapi.HTTPException(404, "You have not uploaded a CV yet")
     return fastapi.Response(content=bytes(cv), media_type="application/pdf")
 
-from fastapi.middleware.cors import CORSMiddleware
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 @app.get("/api/jobs")
 def get_all_jobs():
     from connexion_mysql import get_connection
@@ -330,7 +321,7 @@ def filter_jobs(id_country=None,id_category=None,job_title=None,date_posted=None
             query += ")"
     if job_title:
         list_params.append(job_title)
-        query += " and job.title_job = %s"
+        query += " and job.id_job = %s"
     if date_posted:
         query += " and (1=0"
         list_date_posted = date_posted.split(","); 
@@ -342,49 +333,19 @@ def filter_jobs(id_country=None,id_category=None,job_title=None,date_posted=None
             elif i == "Last 7 days":
                 query += " or job.added_time >= NOW() - INTERVAL 7 DAY"
             elif i == "Last 30 days":
-                query += " or job.added_time >= NOW() - INTERVAL 30 DAY" 
+                query += " or job.added_time >= NOW() - INTERVAL 30 DAY"
+            elif i == "Older than 30 days":
+                query += " or job.added_time < NOW() - INTERVAL 30 DAY"
         query += ")"
     if job_type:
-        query += " and (1=0"
-        list_job_type = job_type.split(",")
-        for i in list_job_type:
-            if i == "Full Time":
-                query += " or job.job_type = 'Full Time'"
-            elif i == "Part Time":
-                query += " or job.job_type = 'Part Time'"
-            elif i == "Freelance":
-                query += " or job.job_type = 'Freelance'"
-            elif i == "Seasonal":
-                query += " or job.job_type = 'Seasonal'"
-            elif i == "Fixed-Price":
-                query += " or job.job_type = 'Fixed-Price'"
-        query += ")"
+        values = job_type.split(",")
+        query += " and job.job_type IN (" + ",".join(["%s"] * len(values)) + ")"
+        list_params.extend(values)
 
     if degree:
-        query += " and (1=0"
-        list_degree = degree.split(",")
-        for i in list_degree:
-            if i == "Bac+1":
-                query += " or job.degree = 'Bac+1'"
-            elif i == "Bac+2":
-                query += " or job.degree = 'Bac+2'"
-            elif i == "Technician Diploma":
-                query += " or job.degree = 'Technician Diploma'"
-            elif i == "Bac+3":
-                query += " or job.degree = 'Bac+3'"
-            elif i == "Bac+4":
-                query += " or job.degree = 'Bac+4'"
-            elif i == "Bachelor's Degree":
-                query += " or job.degree = 'Bachelor''s Degree'"
-            elif i == "Bac+5":
-                query += " or job.degree = 'Bac+5'"
-            elif i == "Master's Degree":
-                query += " or job.degree = 'Master''s Degree'"
-            elif i == "Engineering Degree":
-                query += " or job.degree = 'Engineering Degree'"
-            elif i == "PhD / Doctorat":
-                query += " or job.degree = 'PhD / Doctorat'"
-        query += ")"
+        values = degree.split(",")
+        query += " and job.degree IN (" + ",".join(["%s"] * len(values)) + ")"
+        list_params.extend(values)
     query += " ORDER BY added_time DESC;"
     cursor.execute(
         query,
@@ -393,10 +354,54 @@ def filter_jobs(id_country=None,id_category=None,job_title=None,date_posted=None
     filter_data=cursor.fetchall()
     json_data = []
     for i in filter_data:
-        json_data.append({"id" : i[0] ,"title" : i[1] ,"company" : i[2] ,"category" : i[3],"job_type" : i[4],"min_salary" : i[5],"max_salary" : i[6] ,"added_time" : i[9] ,"city" :i[7],"country" : i[8] })
-    return{
-        "filters" : json_data
-    } 
+        json_data.append({"id": i[0], "title": i[1], "company": i[2], "category": i[3],
+                          "job_type": i[4], "min_salary": i[5], "max_salary": i[6],
+                          "added_time": i[9], "city": i[7], "country": i[8]})
+    return {"filters": json_data}
+@app.get("/api/filter_counts")
+def get_filter_counts():
+    from connexion_mysql import get_connection
+    connexion = get_connection()
+    cursor = connexion.cursor()
+
+    def count_list(column):
+        cursor.execute(f"SELECT {column}, COUNT(*) FROM job GROUP BY {column} ORDER BY COUNT(*) DESC")
+        return [{"value": r[0], "label": r[0], "count": r[1]} for r in cursor.fetchall()]
+
+    cursor.execute("""
+        SELECT category.id_category, category.name_category, COUNT(job.id_job)
+        FROM category
+        LEFT JOIN job ON job.id_category = category.id_category
+        GROUP BY category.id_category, category.name_category
+        ORDER BY category.id_category
+    """)
+    category = [{"value": r[0], "label": r[1], "count": r[2]} for r in cursor.fetchall()]
+
+    job_type = count_list("job_type")
+    degree = count_list("degree")
+    cursor.execute("""
+        SELECT
+            COALESCE(SUM(added_time >= NOW() - INTERVAL 1 HOUR), 0),
+            COALESCE(SUM(added_time >= NOW() - INTERVAL 24 HOUR), 0),
+            COALESCE(SUM(added_time >= NOW() - INTERVAL 7 DAY), 0),
+            COALESCE(SUM(added_time >= NOW() - INTERVAL 30 DAY), 0),
+            COALESCE(SUM(added_time < NOW() - INTERVAL 30 DAY), 0)
+        FROM job
+    """)
+    d = cursor.fetchone()
+    cursor.close()
+    connexion.close()
+
+    date_posted = [
+        {"value": "Last Hour",          "label": "Last Hour",          "count": int(d[0])},
+        {"value": "Last 24 hours",      "label": "Last 24 Hours",      "count": int(d[1])},
+        {"value": "Last 7 days",        "label": "Last 7 Days",        "count": int(d[2])},
+        {"value": "Last 30 days",       "label": "Last 30 Days",       "count": int(d[3])},
+        {"value": "Older than 30 days", "label": "Older than 30 Days", "count": int(d[4])},
+    ]
+
+    return {"category": category, "job_type": job_type, "degree": degree, "date_posted": date_posted}
+
 @app.get("/api/filters_homePage")
 def apply_filters_homePage(category = None, location = None, job_titles = None):
     from connexion_mysql import get_connection
@@ -433,7 +438,16 @@ def apply_filters_homePage(category = None, location = None, job_titles = None):
     filter_data=cursor.fetchall()
     json_data = []
     for i in filter_data:
-        json_data.append({"id" : i[0] ,"title" : i[1] ,"company" : i[2] ,"category" : i[3],"job_type" : i[4],"min_salary" : i[5],"max_salary" : i[6] ,"added_time" : i[9] ,"city" :i[7],"country" : i[8] })
-    return{
-        "filters_homePage" : json_data
-    } 
+        json_data.append({"id": i[0], "title": i[1], "company": i[2], "category": i[3],
+                          "job_type": i[4], "min_salary": i[5], "max_salary": i[6],
+                          "added_time": i[9], "city": i[7], "country": i[8]})
+    return {"filters_homePage": json_data}
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:5500"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)

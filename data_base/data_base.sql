@@ -839,3 +839,6 @@ INNER JOIN city ON job.id_city = city.id_city
 INNER JOIN country ON city.id_country = country.id_country
 INNER JOIN category ON job.id_category = category.id_category
 WHERE job.id_job = 'JOB012';
+
+SELECT * FROM users;
+

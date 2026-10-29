@@ -222,3 +222,91 @@ window.addEventListener('scroll', () => header.classList.toggle('scrolled', scro
     search_jobs();
   
   });
+  function make_searchable(select, placeholder) {
+  const box = document.createElement("div");
+  box.className = "combo";
+  select.parentNode.insertBefore(box, select);
+  box.appendChild(select);
+  select.style.display = "none";
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.className = "combo_input";
+  input.autocomplete = "off";
+  input.placeholder = placeholder;
+  const arrow = document.createElement("span");
+  arrow.className = "combo_arrow";
+  const list = document.createElement("ul");
+  list.className = "combo_list";
+  list.hidden = true;
+  box.append(input, arrow, list);
+
+  const MAX = 60;
+  let active = -1;
+  let shown = [];
+
+  const selected_label = () => {
+    const o = select.options[select.selectedIndex];
+    return o && o.value !== "" ? o.textContent : "";
+  };
+
+  function render(filter) {
+    const q = filter.trim().toLowerCase();
+    list.innerHTML = "";
+    shown = [...select.options].filter(o =>
+      o.value === "" ? q === "" : o.textContent.toLowerCase().includes(q));
+    shown.slice(0, MAX).forEach((o, idx) => {
+      const li = document.createElement("li");
+      li.textContent = o.textContent;
+      if (o.value === select.value) li.classList.add("selected");
+      li.addEventListener("mousedown", e => { e.preventDefault(); choose(o); });
+      li.addEventListener("mousemove", () => set_active(idx));
+      list.appendChild(li);
+    });
+    if (!shown.length || shown.length > MAX) {
+      const li = document.createElement("li");
+      li.className = "empty";
+      li.textContent = shown.length ? `${shown.length - MAX} more… keep typing` : "No result";
+      list.appendChild(li);
+    }
+    active = -1;
+  }
+
+  function set_active(i) {
+    const items = list.querySelectorAll("li:not(.empty)");
+    items.forEach(li => li.classList.remove("active"));
+    active = i;
+    if (items[i]) { items[i].classList.add("active"); items[i].scrollIntoView({ block: "nearest" }); }
+  }
+
+  function open()  { render(""); list.hidden = false; box.classList.add("open"); }
+  function close() { list.hidden = true; box.classList.remove("open"); input.value = selected_label(); }
+
+  function choose(option) {
+    select.value = option.value;
+    input.value = selected_label();
+    list.hidden = true;
+    box.classList.remove("open");
+    input.blur();
+  }
+
+  input.addEventListener("focus", () => { open(); input.select(); });
+  input.addEventListener("blur", close);
+  input.addEventListener("input", () => { list.hidden = false; render(input.value); });
+  input.addEventListener("keydown", e => {
+    const count = Math.min(shown.length, MAX);
+    if (e.key === "ArrowDown") { e.preventDefault(); if (list.hidden) open(); set_active(Math.min(active + 1, count - 1)); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); set_active(Math.max(active - 1, 0)); }
+    else if (e.key === "Enter") {
+      if (list.hidden) return;              // liste fermée : Entrée lance la recherche
+      e.preventDefault();
+      if (shown[active]) choose(shown[active]); else if (count === 1) choose(shown[0]);
+    }
+    else if (e.key === "Escape") { input.blur(); }
+  });
+  arrow.addEventListener("mousedown", e => { e.preventDefault(); list.hidden ? input.focus() : input.blur(); });
+}
+
+make_searchable(list_job_title, "Search a job title");
+make_searchable(list_location, "Search a location");
+make_searchable(list_category, "Search a category");

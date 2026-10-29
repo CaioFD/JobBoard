@@ -220,4 +220,5 @@ window.addEventListener('scroll', () => header.classList.toggle('scrolled', scro
   btn_search.addEventListener("click",function(event){
     event.preventDefault();
     search_jobs();
+  
   });

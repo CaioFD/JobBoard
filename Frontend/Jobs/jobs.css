@@ -258,37 +258,6 @@ nav a {
     color: var(--text_muted);
 }
 
-.range {
-    position: relative;
-    height: 20px;
-}
-
-.range input {
-    position: absolute;
-    width: 100%;
-    margin: 0;
-    top: 0;
-    background: transparent;
-    pointer-events: none;
-    accent-color: var(--teal);
-}
-
-.range input::-webkit-slider-thumb {
-    pointer-events: auto;
-}
-
-.range input::-moz-range-thumb {
-    pointer-events: auto;
-}
-
-.salary_footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 13px;
-    font-weight: 500;
-    margin-top: 8px;
-}
 
 /* ---------- JOB LIST ---------- */
 
@@ -534,4 +503,12 @@ nav a {
     .footer_links {
         gap: 40px 80px;
     }
+}
+.check_list li[hidden] {
+    display: none;
+}
+.input_box select {
+    width: 100%;
+    min-width: 0;
+    cursor: pointer;
 }

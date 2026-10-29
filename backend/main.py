@@ -456,3 +456,136 @@ def delete_job(id_job: str, admin: dict = fastapi.Depends(require_admin)):
     if deleted == 0:
         raise fastapi.HTTPException(404, "This job does not exist anymore")
     return {"message": "Job deleted"}
+
+@app.get("/api/filters_jobs")
+def filter_jobs(id_country=None,id_category=None,job_title=None,date_posted=None,job_type=None,degree=None):
+    from connexion_mysql import get_connection
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    query = """SELECT job.id_job,job.title_job,company.name_company,category.name_category,job.job_type,job.min_salary,job.max_salary,city.name_city,country.name_country,job.added_time
+        FROM job
+        INNER JOIN city
+        ON job.id_city=city.id_city
+        INNER JOIN country
+        ON country.id_country=city.id_country
+        INNER JOIN company
+        ON job.id_company=company.id_company
+        INNER JOIN category
+        ON job.id_category=category.id_category
+        WHERE 1=1
+        """
+    list_params = []
+    if id_country:
+        list_params.append(id_country)
+        query += " and country.id_country = %s"
+    if id_category:
+        list_cat = id_category.split(",")
+        query += " and (1=0"
+        for i in list_cat:
+            query += " or category.id_category = %s"
+            list_params.append(i)
+        query += ")"
+    if job_title:
+        list_params.append(job_title)
+        query += " and job.title_job = %s"
+    if date_posted:
+        query += " and (1=0"
+        list_date_posted = date_posted.split(",")
+        for i in list_date_posted:
+            if i == "Last Hour":
+                query += " or job.added_time >= NOW() - INTERVAL 1 HOUR"
+            elif i == "Last 24 hours":
+                query += " or job.added_time >= NOW() - INTERVAL 24 HOUR"
+            elif i == "Last 7 days":
+                query += " or job.added_time >= NOW() - INTERVAL 7 DAY"
+            elif i == "Last 30 days":
+                query += " or job.added_time >= NOW() - INTERVAL 30 DAY"
+        query += ")"
+    if job_type:
+        query += " and (1=0"
+        list_job_type = job_type.split(",")
+        for i in list_job_type:
+            if i == "Full Time":
+                query += " or job.job_type = 'Full Time'"
+            elif i == "Part Time":
+                query += " or job.job_type = 'Part Time'"
+            elif i == "Freelance":
+                query += " or job.job_type = 'Freelance'"
+            elif i == "Seasonal":
+                query += " or job.job_type = 'Seasonal'"
+            elif i == "Fixed-Price":
+                query += " or job.job_type = 'Fixed-Price'"
+        query += ")"
+
+    if degree:
+        query += " and (1=0"
+        list_degree = degree.split(",")
+        for i in list_degree:
+            if i == "Bac+1":
+                query += " or job.degree = 'Bac+1'"
+            elif i == "Bac+2":
+                query += " or job.degree = 'Bac+2'"
+            elif i == "Technician Diploma":
+                query += " or job.degree = 'Technician Diploma'"
+            elif i == "Bac+3":
+                query += " or job.degree = 'Bac+3'"
+            elif i == "Bac+4":
+                query += " or job.degree = 'Bac+4'"
+            elif i == "Bachelor's Degree":
+                query += " or job.degree = 'Bachelor''s Degree'"
+            elif i == "Bac+5":
+                query += " or job.degree = 'Bac+5'"
+            elif i == "Master's Degree":
+                query += " or job.degree = 'Master''s Degree'"
+            elif i == "Engineering Degree":
+                query += " or job.degree = 'Engineering Degree'"
+            elif i == "PhD / Doctorat":
+                query += " or job.degree = 'PhD / Doctorat'"
+        query += ")"
+    query += " ORDER BY added_time DESC;"
+    cursor.execute(query, list_params)
+    filter_data = cursor.fetchall()
+    json_data = []
+    for i in filter_data:
+        json_data.append({"id": i[0], "title": i[1], "company": i[2], "category": i[3],
+                          "job_type": i[4], "min_salary": i[5], "max_salary": i[6],
+                          "added_time": i[9], "city": i[7], "country": i[8]})
+    return {"filters": json_data}
+
+@app.get("/api/filters_homePage")
+def apply_filters_homePage(category=None, location=None, job_titles=None):
+    from connexion_mysql import get_connection
+    connexion = get_connection()
+    cursor = connexion.cursor()
+    query = """
+        SELECT job.id_job,job.title_job,company.name_company,category.name_category,job.job_type,job.min_salary,job.max_salary,city.name_city,country.name_country,job.added_time
+        FROM job
+        INNER JOIN city
+        ON job.id_city=city.id_city
+        INNER JOIN country
+        ON country.id_country=city.id_country
+        INNER JOIN company
+        ON job.id_company=company.id_company
+        INNER JOIN category
+        ON category.id_category=job.id_category
+        WHERE 1=1
+    """
+    params = []
+    if category:
+        params.append(category)
+        query += " and job.id_category = %s"
+    if location:
+        params.append(location)
+        query += " and country.id_country = %s"
+    if job_titles:
+        params.append(job_titles)
+        query += " and job.id_job = %s"
+    query += " ORDER BY added_time DESC;"
+    cursor.execute(query, params)
+    filter_data = cursor.fetchall()
+    json_data = []
+    for i in filter_data:
+        json_data.append({"id": i[0], "title": i[1], "company": i[2], "category": i[3],
+                          "job_type": i[4], "min_salary": i[5], "max_salary": i[6],
+                          "added_time": i[9], "city": i[7], "country": i[8]})
+    return {"filters_homePage": json_data}

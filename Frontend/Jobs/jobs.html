@@ -43,69 +43,62 @@
 
   <main id="jobs_page">
     <!-- ---------- FILTROS ---------- -->
-    <aside class="filters">
+    <aside class="filters" id="filters">
       <form>
         <h3>Search by Job Title</h3>
         <label class="input_box">
           <svg class="icon"><use href="#icon-search"/></svg>
-          <input type="search" placeholder="Job title or company" aria-label="Job title or company">
+          <select id="job_title_select">
+                <option value="" selected>Job Title</option>
+          </select>
         </label>
+        
 
         <h3>Location</h3>
         <label class="input_box">
           <svg class="icon"><use href="#icon-pin"/></svg>
           <select aria-label="Choose city" id="location_select">
-            <option value="">Choose city</option>
+            <option value="">Choose the country</option>
           </select>
         </label>
 
         <h3>Category</h3>
         <ul class="check_list" id="category_select">
-          <li><label><input type="checkbox"> Commerce</label><span class="count">10</span></li>
-          <li><label><input type="checkbox"> Telecomunications</label><span class="count">10</span></li>
-          <li><label><input type="checkbox"> Hotels &amp; Tourism</label><span class="count">10</span></li>
-          <li><label><input type="checkbox"> Education</label><span class="count">10</span></li>
-          <li><label><input type="checkbox"> Financial Services</label><span class="count">10</span></li>
-          <li class="extra" hidden><label><input type="checkbox"> Media</label><span class="count">10</span></li>
-          <li class="extra" hidden><label><input type="checkbox"> Construction</label><span class="count">10</span></li>
         </ul>
         <button type="button" class="btn btn_full" id="show_more">Show More</button>
 
         <h3>Job Type</h3>
-        <ul class="check_list">
-          <li><label><input type="checkbox"> Full Time</label><span class="count">10</span></li>
-          <li><label><input type="checkbox"> Part Time</label><span class="count">10</span></li>
-          <li><label><input type="checkbox"> Freelance</label><span class="count">10</span></li>
-          <li><label><input type="checkbox"> Seasonal</label><span class="count">10</span></li>
-          <li><label><input type="checkbox"> Fixed-Price</label><span class="count">10</span></li>
+        <ul class="check_list" id="job_type">
+          <li><label><input type="checkbox" value="Full Time"> Full Time</label><span class="count">10</span></li>
+          <li><label><input type="checkbox" value="Part Time"> Part Time</label><span class="count">10</span></li>
+          <li><label><input type="checkbox" value="Freelance"> Freelance</label><span class="count">10</span></li>
+          <li><label><input type="checkbox" value="Seasonal"> Seasonal</label><span class="count">10</span></li>
+          <li><label><input type="checkbox" value="Fixed-Price"> Fixed-Price</label><span class="count">10</span></li>
         </ul>
 
-        <h3>Experience Level</h3>
-        <ul class="check_list">
-          <li><label><input type="checkbox"> No-experience</label><span class="count">10</span></li>
-          <li><label><input type="checkbox"> Fresher</label><span class="count">10</span></li>
-          <li><label><input type="checkbox"> Intermediate</label><span class="count">10</span></li>
-          <li><label><input type="checkbox"> Expert</label><span class="count">10</span></li>
+        <h3>Degree</h3>
+        <ul class="check_list" id="degree">
+          <li><label><input type="checkbox" value="Bac+1"> Bac+1</label><span class="count">10</span></li>
+          <li><label><input type="checkbox" value="Bac+2"> Bac+2</label><span class="count">10</span></li>
+          <li><label><input type="checkbox" value="Technician Diploma"> Technician Diploma</label><span class="count">10</span></li>
+          <li><label><input type="checkbox" value="Bac+3"> Bac+3</label><span class="count">10</span></li>
+          <li><label><input type="checkbox" value="Bac+4"> Bac+4</label><span class="count">10</span></li>
+          <li><label><input type="checkbox" value="Bachelor's Degree"> Bachelor's Degree </label><span class="count">10</span></li>
+          <li><label><input type="checkbox" value="Bac+5"> Bac+5</label><span class="count">10</span></li>
+          <li><label><input type="checkbox" value="Master's Degree"> Master's Degree</label><span class="count">10</span></li>
+          <li><label><input type="checkbox" value="Engineering Degree"> Engineering Degree</label><span class="count">10</span></li>
+          <li><label><input type="checkbox" value="PhD / Doctorat"> PhD / Doctorat</label><span class="count">10</span></li>
         </ul>
 
         <h3>Date Posted</h3>
-        <ul class="check_list">
-          <li><label><input type="checkbox"> All</label><span class="count">10</span></li>
-          <li><label><input type="checkbox"> Last Hour</label><span class="count">10</span></li>
-          <li><label><input type="checkbox"> Last 24 Hours</label><span class="count">10</span></li>
-          <li><label><input type="checkbox"> Last 7 Days</label><span class="count">10</span></li>
-          <li><label><input type="checkbox"> Last 30 Days</label><span class="count">10</span></li>
+        <ul class="check_list" id="date_posted">
+          <li><label><input type="checkbox" value="Last Hour"> Last Hour</label><span class="count">10</span></li>
+          <li><label><input type="checkbox" value="Last 24 hours"> Last 24 Hours</label><span class="count">10</span></li>
+          <li><label><input type="checkbox" value="Last 7 days"> Last 7 Days</label><span class="count">10</span></li>
+          <li><label><input type="checkbox" value="Last 30 days"> Last 30 Days</label><span class="count">10</span></li>
         </ul>
 
-        <h3>Salary</h3>
-        <div class="range" id="salary_range">
-          <input type="range" min="0" max="15000" step="1" value="0" aria-label="Minimum salary">
-          <input type="range" min="0" max="15000" step="1" value="9999" aria-label="Maximum salary">
-        </div>
-        <div class="salary_footer">
-          <span>Salary: <output id="salary_value">$0 - $9999</output></span>
-          <button type="button" class="btn btn_small">Apply</button>
-        </div>
+       
       </form>
     </aside>
 

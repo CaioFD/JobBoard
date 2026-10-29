@@ -235,13 +235,7 @@ nav a {
 /* ---------- JOB LIST ---------- */
 
 /* equal side columns keep the pagination in the exact middle */
-.results_header {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    gap: 12px;
-    align-items: center;
-    margin-bottom: 24px;
-}
+
 
 #create_job_btn {
     justify-self: end;
@@ -252,10 +246,6 @@ nav a {
     display: none;
 }
 
-.results_header p {
-    margin: 0;
-    color: var(--text_muted);
-}
 
 /* width and padding undo the header's global nav rule */
 #pagination {
@@ -264,6 +254,19 @@ nav a {
     gap: 16px;
     width: auto;
     padding: 0;
+    margin-left: auto;      /* pousse la pagination au bord droit */
+}
+/* texte à gauche, pagination collée au coin supérieur droit des cartes */
+.results_header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.results_header p {
+    margin: 0;
+    color: var(--text_muted);
 }
 
 #pagination .btn:disabled {
@@ -388,10 +391,6 @@ nav a {
 }
 
 @media (max-width: 640px) {
-    .results_header {
-        grid-template-columns: 1fr;
-        justify-items: center;
-    }
 
     #logo img,
     .footer_brand img {
@@ -619,3 +618,20 @@ nav a {
 
 /* le survol d'une ligne cochée garde son fond blanc */
 .check_list li:has(input:checked):hover { background: #fff; }
+.filters {
+    background-color: var(--teal_light);
+    border-radius: 16px;
+    padding: 24px 16px;
+    align-self: start;
+    margin-top: 0;
+}
+
+.filters form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.filters h3 {
+    margin: 0 0 6px;
+}

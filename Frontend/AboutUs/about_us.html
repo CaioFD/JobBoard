@@ -1,132 +1,383 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JobBoard - About Us</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="about_us.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Learn how JobBoard helps you explore job opportunities, discover career options, and apply for positions that match your skills and qualifications.">
+
+    <title>JobBoard - About Us</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="about_us.css">
 </head>
+
 <body>
-  <header>
-    <nav>
-      <div id="logo">
-        <img src="../Jobs/logo.png" alt="Logo">
-      </div>
-      <ul>
-        <li><a href="../home_page/home_page.html">Home</a></li>
-        <li><a href="../Jobs/jobs.html">Jobs</a></li>
-        <li><a href="" class="active" aria-current="page">About Us</a></li>
-        <li><a href="../ContactUs/contact_us.html">Contact Us</a></li>
-      </ul>
-      <div class="nav_controls">
-        <button id="login_btn" onclick="location.href='../login/login.html'">Login</button>
-        <button id="Register_btn" onclick="location.href='../signIn/SignIn.html'">Register</button>
-      </div>
-    </nav>
-  </header>
 
-  <section id="hero">
-    <h1>About Us</h1>
-  </section>
+    <!-- HEADER -->
+    <header>
+        <nav>
+            <div id="logo">
+                <img src="../Jobs/logo.png" alt="JobBoard Logo">
+            </div>
 
-  <!-- Ícones reutilizados (<use href="#icon-...">) -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="icon-user" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="10" r="3"/><path d="M7 18.5a5.5 5.5 0 0 1 10 0"/></symbol>
-    <symbol id="icon-file" viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h6M9 9h2"/></symbol>
-    <symbol id="icon-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/></symbol>
-    <symbol id="icon-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
-    <symbol id="icon-plus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></symbol>
-    <symbol id="icon-close" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor" stroke="none"/><path d="m9 9 6 6M15 9l-6 6" stroke="#FFFFFF"/></symbol>
-  </svg>
+            <ul>
+                <li><a href="../home_page/home_page.html">Home</a></li>
+                <li><a href="../Jobs/jobs.html">Jobs</a></li>
+                <li><a href="" class="active" aria-current="page">About Us</a></li>
+                <li><a href="../ContactUs/contact_us.html">Contact Us</a></li>
+            </ul>
 
-  <main id="about_page">
-    <!-- ---------- HOW IT WORKS ---------- -->
-    <section class="about_section">
-      <div class="section_title">
-        <h2>How it works</h2>
-        <p>At eu lobortis pretium tincidunt amet lacus ut aenean aliquet. Blandit a massa elementum id scelerisque rhoncus...</p>
-      </div>
-      <ul class="steps">
-        <li>
-          <svg class="icon"><use href="#icon-user"/></svg>
-          <h3>Create Account</h3>
-          <p>Nunc sed a nisl purus. Nibh dis faucibus proin lacus</p>
-        </li>
-        <li>
-          <svg class="icon"><use href="#icon-file"/></svg>
-          <h3>Upload Resume</h3>
-          <p>Felis eu ultrices a sed massa. Commodo fringilla sed tempor</p>
-        </li>
-        <li>
-          <svg class="icon"><use href="#icon-briefcase"/></svg>
-          <h3>Find Jobs</h3>
-          <p>Commodo fringilla sed tempor risus laoreet ultricies ipsum</p>
-        </li>
-        <li>
-          <svg class="icon"><use href="#icon-check"/></svg>
-          <h3>Apply Job</h3>
-          <p>Nisi enim feugiat enim volutpat. Sem quis viverra</p>
-        </li>
-      </ul>
+            <div class="nav_controls">
+                <button id="login_btn" onclick="location.href='../login/login.html'">
+                    Login
+                </button>
+
+                <button id="Register_btn" onclick="location.href='../signIn/SignIn.html'">
+                    Register
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section id="hero">
+        <h1>How It Works</h1>
     </section>
 
-    <!-- ---------- FAQ ---------- -->
-    <!-- name="faq" faz o navegador manter só um item aberto por vez (sem JS) -->
-    <section class="about_section faq">
-      <div class="section_title">
-        <h2>Frequently Asked Questions</h2>
-        <p>At eu lobortis pretium tincidunt amet lacus ut aenean aliquet</p>
-      </div>
-      <details name="faq" open>
-        <summary><span class="num">01</span> Can I upload a CV?<svg class="icon icon_open"><use href="#icon-plus"/></svg><svg class="icon icon_close"><use href="#icon-close"/></svg></summary>
-        <p>Nunc sed a nisl purus. Nibh dis faucibus proin lacus tristique. Sit congue non vitae odio sit erat in. Felis eu ultrices a sed massa. Commodo fringilla sed tempor risus laoreet ultricies ipsum. Habitasse morbi faucibus in iaculis lectus. Nisi enim feugiat enim volutpat. Sem quis viverra viverra odio mauris nunc.</p>
-      </details>
-      <details name="faq">
-        <summary><span class="num">02</span> How long will the recruitment process take?<svg class="icon icon_open"><use href="#icon-plus"/></svg><svg class="icon icon_close"><use href="#icon-close"/></svg></summary>
-        <p>Nunc sed a nisl purus. Nibh dis faucibus proin lacus tristique. Sit congue non vitae odio sit erat in. Felis eu ultrices a sed massa.</p>
-      </details>
-      <details name="faq">
-        <summary><span class="num">03</span> What does the recruitment and selection process involve?<svg class="icon icon_open"><use href="#icon-plus"/></svg><svg class="icon icon_close"><use href="#icon-close"/></svg></summary>
-        <p>Nunc sed a nisl purus. Nibh dis faucibus proin lacus tristique. Sit congue non vitae odio sit erat in. Felis eu ultrices a sed massa.</p>
-      </details>
-      <details name="faq">
-        <summary><span class="num">04</span> Do you recruit for Graduates, Apprentices and Students?<svg class="icon icon_open"><use href="#icon-plus"/></svg><svg class="icon icon_close"><use href="#icon-close"/></svg></summary>
-        <p>Nunc sed a nisl purus. Nibh dis faucibus proin lacus tristique. Sit congue non vitae odio sit erat in. Felis eu ultrices a sed massa.</p>
-      </details>
-      <details name="faq">
-        <summary><span class="num">05</span> Can I receive notifications for any future jobs that may interest me?<svg class="icon icon_open"><use href="#icon-plus"/></svg><svg class="icon icon_close"><use href="#icon-close"/></svg></summary>
-        <p>Nunc sed a nisl purus. Nibh dis faucibus proin lacus tristique. Sit congue non vitae odio sit erat in. Felis eu ultrices a sed massa.</p>
-      </details>
-    </section>
-  </main>
- <!-- ---------- FOOTER ---------- -->
-  <footer id="site_footer">
-    <div class="footer_brand">
-      <img src="../Jobs/logo.png" alt="JobBoard">
-      <p>Your next big opportunity is one search away. Don't wait for the future, apply to it.</p>
-    </div>
-    <div class="footer_links">
-      <div>
-        <h4>Company</h4>
-        <ul>
-          <li><a href="../AboutUs/about_us.html">About Us</a></li>
-          <li><a href="../Jobs/jobs.html">Jobs</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Job Categories</h4>
-        <ul>
-          <li><a href="../Jobs/jobs.html?category=CAT011">Telecommunications</a></li>
-          <li><a href="../Jobs/jobs.html?category=CAT005">Hotels &amp; Tourism</a></li>
-          <li><a href="../Jobs/jobs.html?category=CAT007">Construction</a></li>
-          <li><a href="../Jobs/jobs.html?category=CAT009">Education</a></li>
-          <li><a href="../Jobs/jobs.html?category=CAT010">Financial Services</a></li>
-        </ul>
-      </div>
-    </div>
-  </footer>
-  <script src="../auth.js"></script>
+    <!-- REUSABLE SVG ICONS -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+
+        <symbol id="icon-user" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="5"/>
+            <circle cx="12" cy="10" r="3"/>
+            <path d="M7 18.5a5.5 5.5 0 0 1 10 0"/>
+        </symbol>
+
+        <symbol id="icon-file" viewBox="0 0 24 24">
+            <path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/>
+            <path d="M14 3v5h5M9 13h6M9 17h6M9 9h2"/>
+        </symbol>
+
+        <symbol id="icon-briefcase" viewBox="0 0 24 24">
+            <rect x="3" y="7" width="18" height="13" rx="2"/>
+            <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/>
+        </symbol>
+
+        <symbol id="icon-check" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="m8 12 3 3 5-6"/>
+        </symbol>
+
+        <symbol id="icon-plus" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 8v8M8 12h8"/>
+        </symbol>
+
+        <symbol id="icon-close" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" fill="currentColor" stroke="none"/>
+            <path d="m9 9 6 6M15 9l-6 6" stroke="#FFFFFF"/>
+        </symbol>
+
+    </svg>
+
+
+    <main id="about_page">
+
+        <!-- HOW IT WORKS -->
+        <section class="about_section">
+
+            
+
+            <ul class="steps">
+
+                <li>
+                    <svg class="icon">
+                        <use href="#icon-user"/>
+                    </svg>
+
+                    <h3>Create an Account</h3>
+
+                    <p>
+                        Register on JobBoard to create your profile
+                        and access the features needed to apply for jobs.
+                    </p>
+                </li>
+
+                <li>
+                    <svg class="icon">
+                        <use href="#icon-file"/>
+                    </svg>
+
+                    <h3>Explore Job Listings</h3>
+
+                    <p>
+                        Browse available opportunities and discover
+                        positions across different industries and categories.
+                    </p>
+                </li>
+
+                <li>
+                    <svg class="icon">
+                        <use href="#icon-briefcase"/>
+                    </svg>
+
+                    <h3>Find the Right Job</h3>
+
+                    <p>
+                        Use search filters to narrow down opportunities
+                        by job title, location, category, and employment type.
+                    </p>
+                </li>
+
+                <li>
+                    <svg class="icon">
+                        <use href="#icon-check"/>
+                    </svg>
+
+                    <h3>Apply for a Job</h3>
+
+                    <p>
+                        Found an interesting opportunity? Log in to your
+                        account and submit your application.
+                    </p>
+                </li>
+
+            </ul>
+        </section>
+
+
+        <!-- FREQUENTLY ASKED QUESTIONS -->
+        <section class="about_section faq">
+
+            <div class="section_title">
+                <h2>Frequently Asked Questions</h2>
+
+                <p>
+                    Find answers to common questions about JobBoard,
+                    browsing opportunities, and applying for jobs.
+                </p>
+            </div>
+
+
+            <!-- FAQ 01 -->
+            <details name="faq" open>
+
+                <summary>
+                    <span class="num">01</span>
+
+                    How can I find job opportunities?
+
+                    <svg class="icon icon_open">
+                        <use href="#icon-plus"/>
+                    </svg>
+
+                    <svg class="icon icon_close">
+                        <use href="#icon-close"/>
+                    </svg>
+                </summary>
+
+                <p>
+                    You can explore our job listings and use the available
+                    search filters to find opportunities by job title,
+                    location, category, employment type, and other criteria.
+                </p>
+
+            </details>
+
+
+            <!-- FAQ 02 -->
+            <details name="faq">
+
+                <summary>
+                    <span class="num">02</span>
+
+                    Do I need an account to browse job listings?
+
+                    <svg class="icon icon_open">
+                        <use href="#icon-plus"/>
+                    </svg>
+
+                    <svg class="icon icon_close">
+                        <use href="#icon-close"/>
+                    </svg>
+                </summary>
+
+                <p>
+                    No account is required to browse job listings or use
+                    the search filters. However, you must create an account
+                    and log in to apply for a job.
+                </p>
+
+            </details>
+
+
+            <!-- FAQ 03 -->
+            <details name="faq">
+
+                <summary>
+                    <span class="num">03</span>
+
+                    What types of jobs are available on JobBoard?
+
+                    <svg class="icon icon_open">
+                        <use href="#icon-plus"/>
+                    </svg>
+
+                    <svg class="icon icon_close">
+                        <use href="#icon-close"/>
+                    </svg>
+                </summary>
+
+                <p>
+                    JobBoard features different employment opportunities,
+                    including full-time, part-time, freelance, seasonal,
+                    and fixed-price positions, depending on available listings.
+                </p>
+
+            </details>
+
+
+            <!-- FAQ 04 -->
+            <details name="faq">
+
+                <summary>
+                    <span class="num">04</span>
+
+                    Can I filter jobs based on my qualifications?
+
+                    <svg class="icon icon_open">
+                        <use href="#icon-plus"/>
+                    </svg>
+
+                    <svg class="icon icon_close">
+                        <use href="#icon-close"/>
+                    </svg>
+                </summary>
+
+                <p>
+                    Yes. You can use the available search filters to narrow
+                    down job listings according to educational qualifications
+                    and other relevant criteria.
+                </p>
+
+            </details>
+
+
+            <!-- FAQ 05 -->
+            <details name="faq">
+
+                <summary>
+                    <span class="num">05</span>
+
+                    How can I find jobs in a specific location?
+
+                    <svg class="icon icon_open">
+                        <use href="#icon-plus"/>
+                    </svg>
+
+                    <svg class="icon icon_close">
+                        <use href="#icon-close"/>
+                    </svg>
+                </summary>
+
+                <p>
+                    Use the location filter to explore job opportunities
+                    in your preferred country and find listings that match
+                    your geographical preferences.
+                </p>
+
+            </details>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer id="site_footer">
+
+        <div class="footer_brand">
+
+            <img src="../Jobs/logo.png" alt="JobBoard">
+
+            <p>
+                Your next big opportunity is one search away.
+                Explore opportunities, discover your potential,
+                and take the next step in your career.
+            </p>
+
+        </div>
+
+
+        <div class="footer_links">
+
+            <div>
+                <h4>Company</h4>
+
+                <ul>
+                    <li>
+                        <a href="../AboutUs/about_us.html">About Us</a>
+                    </li>
+
+                    <li>
+                        <a href="../Jobs/jobs.html">Jobs</a>
+                    </li>
+
+                    <li>
+                        <a href="../ContactUs/contact_us.html">Contact Us</a>
+                    </li>
+                </ul>
+            </div>
+
+
+            <div>
+                <h4>Job Categories</h4>
+
+                <ul>
+                    <li>
+                        <a href="../Jobs/jobs.html?category=CAT011">
+                            Telecommunications
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="../Jobs/jobs.html?category=CAT005">
+                            Hotels &amp; Tourism
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="../Jobs/jobs.html?category=CAT007">
+                            Construction
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="../Jobs/jobs.html?category=CAT009">
+                            Education
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="../Jobs/jobs.html?category=CAT010">
+                            Financial Services
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- AUTHENTICATION SCRIPT -->
+    <script src="../auth.js"></script>
+
 </body>
 </html>

@@ -1,0 +1,280 @@
+/* ===== Contact Us : équipe ===== */
+
+/* Centrage global de la page (écrase les alignements de contact_us.css) */
+main#contact_page {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+}
+
+main#contact_page > h2,
+main#contact_page > p,
+main#contact_page .section_title {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+main#contact_page *,
+main#contact_page *::before,
+main#contact_page *::after {
+  box-sizing: border-box;
+}
+
+.team_grid {
+  width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  justify-items: center;
+}
+
+.team_card {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/* ----- Texte d'introduction lisible ----- */
+.intro_block {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto 40px;
+  padding: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+main#contact_page .intro_block > p.intro_text {
+  max-width: 100%;
+  margin: 0 auto;
+  font-size: 1rem;
+  line-height: 1.7;
+  font-weight: 400;
+  color: #000;
+  text-align: center;
+}
+
+main#contact_page .intro_block > p.intro_lead {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #000;
+}
+
+.intro_text {
+  max-width: 760px;
+  margin: 0 auto;
+  line-height: 1.7;
+  font-size: 1.05rem;
+  text-align: center;
+}
+
+.team_section {
+  width: 100%;
+  max-width: 1150px;
+  margin: 0 auto;
+}
+
+.section_title,
+main#contact_page .section_title {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 640px) {
+  .section_title,
+  main#contact_page .section_title {
+    font-size: 32px;
+  }
+}
+
+/* ----- Deux cartes côte à côte ----- */
+.team_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  align-items: stretch;
+}
+
+.team_card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 26px 32px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .07);
+  text-align: center;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.team_card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, .12);
+}
+
+.team_photo {
+  display: block;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 5px solid #f1f1f1;
+  margin-bottom: 14px;
+}
+
+.team_photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 10%;
+  display: block;
+  transition: transform .3s ease;
+}
+
+.team_card h4 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+
+.team_role {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0 0 10px;
+}
+
+.team_bio {
+  line-height: 1.55;
+  font-size: .95rem;
+  margin: 0 0 16px;
+}
+
+/* ----- GitHub / LinkedIn ----- */
+.social_links {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 14px;
+  width: 100%;
+  display: flex;
+  gap: 12px;
+}
+
+.social_links li {
+  flex: 1;
+}
+
+.social_links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 500;
+  transition: background .2s ease, border-color .2s ease;
+}
+
+.social_links a:hover {
+  background: #f5f6f8;
+  border-color: #cfd3da;
+}
+
+.brand_icon {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+  stroke: none;
+  flex-shrink: 0;
+}
+
+/* ----- Téléphone / Gmail ----- */
+.direct_list {
+  list-style: none;
+  padding: 14px 0 0;
+  margin: 0 0 18px;
+  width: 100%;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.direct_list li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.direct_list .icon {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.direct_list a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.direct_list a:hover {
+  text-decoration: underline;
+}
+
+/* ----- Bouton portfolio ----- */
+.portfolio_btn {
+  margin-top: auto;
+  padding: 10px 28px;
+  border-radius: 8px;
+  background-color: #309689;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: 300;
+  transition: opacity .2s ease;
+}
+
+.portfolio_btn:hover {
+  opacity: .85;
+}
+
+/* ----- Responsive : les cartes s'empilent seulement sur petits écrans ----- */
+@media (max-width: 820px) {
+  .team_grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .social_links {
+    flex-direction: column;
+  }
+  .team_card {
+    padding: 32px 22px;
+  }
+}

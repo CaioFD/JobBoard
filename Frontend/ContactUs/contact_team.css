@@ -146,6 +146,10 @@ main#contact_page .section_title {
   transition: transform .3s ease;
 }
 
+.team_card:nth-child(2) .team_photo img {
+  object-position: center 70%;
+}
+
 .team_card h4 {
   font-size: 1.4rem;
   font-weight: 700;

@@ -38,8 +38,10 @@ function addNavLink(text, href) {
   document.querySelector("header nav ul").appendChild(li);
 }
 
-// Logged-in users see their applications; admins also see everyone's
-if (getToken()) addNavLink("My Applications", "../MyApplications/my_applications.html");
+// Regular users see their applications; admins see everyone's applications instead
+if (getToken() && getUser()?.role === "user") {
+  addNavLink("My Applications", "../MyApplications/my_applications.html");
+}
 if (getUser()?.role === "admin") addNavLink("Applications", "../Admin/applications.html");
 
 if (getToken()) {

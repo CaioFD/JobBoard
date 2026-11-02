@@ -353,7 +353,7 @@ nav a {
 
 .apply_btn {
     min-width: 240px;
-    background-color: #2563EB;
+    background-color: #309689;
     color: #FFFFFF;
     font-family: inherit;
     font-size: 16px;
@@ -365,11 +365,11 @@ nav a {
 }
 
 .apply_btn:hover {
-    background-color: #1D4ED8;
+    background-color: #267A70;
 }
 
 .apply_btn:focus-visible {
-    outline: 2px solid #1D4ED8;
+    outline: 2px solid #267A70;
     outline-offset: 2px;
 }
 

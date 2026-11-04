@@ -11,7 +11,7 @@ function make_icon(id) {
 let list_location = document.getElementById("location_select");
 let list_category = document.getElementById("category_select");
   async function charge_categories() {
-      let response = await fetch("http://127.0.0.1:8000/api/categories_HomePage");
+      let response = await fetch("/api/categories_HomePage");
       if(response.ok){
           const data= await response.json();
           console.log(data);
@@ -28,7 +28,7 @@ let list_category = document.getElementById("category_select");
     }
   charge_categories();
   async function charge_locations() {
-      let response = await fetch("http://127.0.0.1:8000/api/locations_HomePage");
+      let response = await fetch("/api/locations_HomePage");
       if(response.ok){
           const data_locations = await response.json();
           console.log(data_locations);
@@ -46,7 +46,7 @@ let list_category = document.getElementById("category_select");
   let bull_tot_jobs=document.getElementById("tot_jobs");
   charge_locations();
   async function tot_jobs(){
-      let response = await fetch("http://127.0.0.1:8000/api/tot_jobs");
+      let response = await fetch("/api/tot_jobs");
       if(response.ok){
         const tot_jobs = await response.json();
         console.log(tot_jobs);
@@ -59,7 +59,7 @@ let list_category = document.getElementById("category_select");
   tot_jobs();
   let list_job_title = document.getElementById("job_title_select");
   async function charge_job_titles(){
-      let response = await fetch("http://127.0.0.1:8000/api/job_titles");
+      let response = await fetch("/api/job_titles");
       if(response.ok){
         const title_jobs = await response.json();
         console.log(title_jobs);
@@ -79,7 +79,7 @@ let list_category = document.getElementById("category_select");
 
   let num_tot_comapanies=document.getElementById("tot_companies");
   async function charge_tot_comapnies(){
-    let response  = await fetch("http://127.0.0.1:8000/api/tot_companies");
+    let response  = await fetch("/api/tot_companies");
     if(response.ok){
       const tot_companies = await response.json();
       console.log(tot_companies);
@@ -93,7 +93,7 @@ let list_category = document.getElementById("category_select");
 
   let recent_jobs = document.getElementById("recent_jobs");
   async function get_closest_added_jobs(){
-      let response = await fetch("http://127.0.0.1:8000/api/recent_jobs");
+      let response = await fetch("/api/recent_jobs");
       if(response.ok){
         const recent_jobs = await response.json();
         console.log(recent_jobs);
@@ -213,7 +213,7 @@ window.addEventListener('scroll', () => header.classList.toggle('scrolled', scro
       job_titles: list_job_title.value,
    });
    const URL_values=params.toString();
-   const URL = `http://127.0.0.1:5500/Frontend/Jobs/jobs.html?${URL_values}`;
+   const URL = `../Jobs/jobs.html?${URL_values}`;
    window.location.assign(URL);
   }
   const btn_search = document.getElementById("search_btn");

@@ -712,3 +712,11 @@ def apply_filters_homePage(category=None, location=None, job_titles=None):
     return{
         "filters_homePage" : json_data
     }
+# Serve the frontend from the same server so the pages can call /api with relative URLs
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
+app.mount("/Frontend", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "..", "Frontend")), name="frontend")
+
+@app.get("/")
+def home():
+    return RedirectResponse("/Frontend/home_page/home_page.html")

@@ -1,5 +1,5 @@
 // Shared by every page with the header: keeps the login token and swaps Login/Register for Profile/Logout
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "";
 
 function getToken() {
   return localStorage.getItem("token");

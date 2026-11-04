@@ -129,7 +129,7 @@ function make_card(i){
 }
 
 async function get_all_jobs(){
-      let response = await fetch("http://127.0.0.1:8000/api/jobs");
+      let response = await fetch("/api/jobs");
       if(response.ok){
         const recent_jobs = await response.json();
         display_cards("jobs", recent_jobs.cards_data);
@@ -160,7 +160,7 @@ document.getElementById("next_page").addEventListener("click", () => paginate(cu
   
   let list_location = document.getElementById("location_select");
     async function charge_locations() {
-        let response = await fetch("http://127.0.0.1:8000/api/locations_HomePage");
+        let response = await fetch("/api/locations_HomePage");
         if(response.ok){
             const data_locations = await response.json();
             console.log(data_locations);
@@ -178,7 +178,7 @@ document.getElementById("next_page").addEventListener("click", () => paginate(cu
 let filter_counts = { category: [], job_type: [], degree: [], date_posted: [] };
 
 async function load_counts() {
-  const response = await fetch("http://127.0.0.1:8000/api/filter_counts");
+  const response = await fetch("/api/filter_counts");
   if (response.ok) {
     filter_counts = await response.json();
   } else {
@@ -238,7 +238,7 @@ function render_filters() {
   btn_show_more();
   let list_job_title = document.getElementById("job_title_select");
   async function charge_job_titles(){
-      let response = await fetch("http://127.0.0.1:8000/api/job_titles");
+      let response = await fetch("/api/job_titles");
       if(response.ok){
         const title_jobs = await response.json();
         console.log(title_jobs);
@@ -310,7 +310,7 @@ async function search_jobs() {
     });
  
 
-    let url = `http://127.0.0.1:8000/api/filters_jobs?${params}`;
+    let url = `/api/filters_jobs?${params}`;
     console.log(url);
     let response = await fetch(url);
     if(response.ok){
@@ -354,7 +354,7 @@ async function read_filters_homePage(){
   location_select.value = location_url;
   job_title.value = jt_url;
 
-  let url = `http://127.0.0.1:8000/api/filters_homePage?category=${category_url}&location=${location_url}&job_titles=${jt_url}`;
+  let url = `/api/filters_homePage?category=${category_url}&location=${location_url}&job_titles=${jt_url}`;
   let response = await fetch(url);
   if(response.ok){
     let data = await  response.json();

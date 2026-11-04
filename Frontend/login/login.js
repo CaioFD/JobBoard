@@ -11,7 +11,7 @@ form.addEventListener("submit", async (event) => {
   message.classList.remove("success");
   message.textContent = "";
   try {
-    let response = await fetch("http://127.0.0.1:8000/api/login", {
+    let response = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: form.email.value, password: form.password.value })

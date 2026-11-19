@@ -2,6 +2,8 @@
 
 A full-stack job board: candidates browse and filter job offers, create a profile, upload a CV and apply; admins publish, edit and delete jobs and review every application.
 
+**Live application:** [JobBoard – Open the website](https://jobboard-production-1f9a.up.railway.app/Frontend/home_page/home_page.html)
+
 **Stack:** HTML · CSS · vanilla JavaScript · Python (FastAPI) · MySQL · JWT · deployed on Railway
 
 ## Features
@@ -25,7 +27,7 @@ A full-stack job board: candidates browse and filter job offers, create a profil
 
 ## Project structure
 
-```
+```text
 JobBoard/
 ├── backend/
 │   ├── main.py               # FastAPI app: API routes + serves the frontend
@@ -48,6 +50,7 @@ JobBoard/
 **Requirements:** Python 3.10+ and MySQL 8.
 
 1. **Clone and install dependencies**
+
    ```bash
    git clone <repo-url>
    cd JobBoard
@@ -55,36 +58,41 @@ JobBoard/
    ```
 
 2. **Create the database** — run `data_base/data_base.sql` in MySQL (Workbench or CLI). It creates the `job_board` database, its tables and sample data.
+
    ```bash
    mysql -u root -p < data_base/data_base.sql
    ```
 
 3. **Set the environment variables**
 
-   | Variable        | Required | Default     |
-   |-----------------|----------|-------------|
-   | `MYSQLPASSWORD` | yes      | —           |
-   | `JWT_SECRET`    | yes      | —           |
-   | `MYSQLHOST`     | no       | `localhost` |
-   | `MYSQLPORT`     | no       | `3306`      |
-   | `MYSQLUSER`     | no       | `root`      |
+   | Variable | Required | Default |
+   |---|---|---|
+   | `MYSQLPASSWORD` | yes | — |
+   | `JWT_SECRET` | yes | — |
+   | `MYSQLHOST` | no | `localhost` |
+   | `MYSQLPORT` | no | `3306` |
+   | `MYSQLUSER` | no | `root` |
 
    On Windows (PowerShell), then reopen the terminal:
+
    ```powershell
    setx MYSQLPASSWORD "your_mysql_password"
    setx JWT_SECRET "a_long_random_value"
    ```
 
 4. **Start the server**
+
    ```bash
    cd backend
    uvicorn main:app --reload
    ```
+
    Open http://localhost:8000 — it redirects to the home page. Interactive API docs are at http://localhost:8000/docs.
 
 ### Creating an admin
 
 New accounts are always regular users. To make one an admin, register it on the site, then run:
+
 ```sql
 UPDATE job_board.users SET user_role = 'admin' WHERE email = 'you@example.com';
 ```
@@ -92,6 +100,7 @@ UPDATE job_board.users SET user_role = 'admin' WHERE email = 'you@example.com';
 ## Running the tests
 
 The tests start the real backend on port 8765 against the local `job_board` database and delete every user they create.
+
 ```bash
 cd backend
 python -m pytest
@@ -100,14 +109,15 @@ python -m pytest
 ## Deployment
 
 The project is set up for [Railway](https://railway.app): add a MySQL service (it provides the `MYSQL*` variables), set `JWT_SECRET`, and Railway runs the start command from `railway.json`:
-```
+
+```bash
 cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
 ```
 
 ## API overview
 
 | Method | Route | Access |
-|--------|-------|--------|
+|---|---|---|
 | GET | `/api/jobs`, `/api/jobs/{id}` | public |
 | GET | `/api/categories_HomePage`, `/api/locations_HomePage`, `/api/cities` | public |
 | GET | `/api/tot_jobs`, `/api/tot_companies`, `/api/recent_jobs`, `/api/job_titles` | public |
